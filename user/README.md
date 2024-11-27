@@ -192,5 +192,5 @@ Common status codes:
 
 For issues or questions, contact:
 
-- Team Lead: [Name]
-- Developer: [Name]
+- Team Lead: [ Messaoud HAMDI ]
+- Developers : [ Messaoud HAMDI - Mouadh Bondka - Kaies Mhadhbi ]
