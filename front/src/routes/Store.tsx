@@ -1,5 +1,4 @@
-import { Link, Outlet, Route, Routes } from "react-router-dom"
-import { Tabs } from "antd"
+import { Tabs, TabsProps } from "antd"
 
 import StorePage from "../components/StorePage"
 import StorePokechakuchon from "../components/StorePokechakuchon"
@@ -7,29 +6,34 @@ import StoreItem from "../components/StoreItem"
 
 const Store = () => {
 
-    const padding = {
-        padding: 5
-      }
+    const items : TabsProps['items'] = [
+        {
+            label: `News`,
+            key: "1",
+            children: <StorePage />,
+          },
+          {
+            label: `Buy Pokechakuchon`,
+            key: "2",
+            children: <StorePokechakuchon />,
+          },
+          {
+            label: `Buy Items`,
+            key: "3",
+            children: <StoreItem />,
+          },
+    ]
 
 
     return (
     <div>
       <h2>Store</h2>
       <div>
-        <Tabs>
-            
-        </Tabs>
-        <Link style={padding} to="/store">News</Link>
-        <Link style={padding} to="/store/pokechakuchon">Pokechakuchon</Link>
-        <Link style={padding} to="/store/items">Items</Link>
-      </div>
-      <div>
-        <Outlet />
-        <Routes>
-            <Route index element={<StorePage />} />
-            <Route path="pokechakuchon" element={<StorePokechakuchon />} />
-            <Route path="items" element={<StoreItem />} />
-        </Routes>
+        <Tabs
+            defaultActiveKey="1"
+            style={{ marginBottom: 32 }}
+            items={items}
+        />
       </div>
     </div>
     )
