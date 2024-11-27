@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const padding = {
+    padding: 5
+  }
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/social">social</Link>
+        <Link style={padding} to="/matches">matches</Link>
+        <Link style={padding} to="/store">users</Link>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/social" element={<Social />} />
+        <Route path="/matches" element={<Matches />} />
+        <Route path="/store" element={<Store />} />
+      </Routes>
+
+      <div>
+        <i> Clash of Pokechakuchon </i> 
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </Router>
   )
 }
+
+const Home = () => (
+  <div>
+    <h2>Home</h2>
+    <p>Welcome to the Clash of Pokechakucha</p>
+  </div>
+)
+
+const Social = () => (
+  <div>
+    <h2>Social</h2>
+    <p>Here you can find friends and your user profile</p>
+  </div>
+)
+
+const Matches = () => (
+  <div>
+    <h2>Matches</h2>
+    <p>Here you can find matches</p>
+  </div>
+)
+
+const Store = () => (
+  <div>
+    <h2>Store</h2>
+    <p>Here you can find the store</p>
+  </div>
+)
+
+
 
 export default App
