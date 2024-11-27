@@ -6,6 +6,7 @@ import {
   useNavigate,
   useLocation
 } from 'react-router-dom'
+import Store from './routes/Store'
 
 const AppTabs = () => {
   const navigate = useNavigate();
@@ -68,14 +69,5 @@ const Matches = () => (
     <p>Here you can find matches</p>
   </div>
 )
-
-const Store = () => (
-  <div>
-    <h2>Store</h2>
-    <p>Here you can find the store</p>
-  </div>
-)
-
-
 
 export default App
