@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import {UserTeam} from "../interfaces";
 
-const DATA_DIR = path.join(__dirname, "./data/users");
+const DATA_DIR = path.join(__dirname, "users");
 
 // Vérifie si le dossier de données existe, sinon le crée.
 if (!fs.existsSync(DATA_DIR)) {
@@ -16,10 +16,13 @@ const getUserFilePath = (userId: string): string => {
 
 // Lecture des données d'un utilisateur
 export const getUserData = (userId: string): UserTeam => {
+    console.log('Dans getUserData');
     const filePath = getUserFilePath(userId);
+    console.log('filePath', filePath);
   
     //Si le fichier du joueur n'existe pas (première connexion), crée le fichier
     if (!fs.existsSync(filePath)) {
+      console.log('File doesnt exist');
       const initialData: UserTeam = { 
         collectionCreature: [],
         collectionFreeItem: [], 

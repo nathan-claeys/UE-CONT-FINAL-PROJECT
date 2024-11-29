@@ -1,6 +1,5 @@
 export interface Item {
-    iditem: string; 
-    name: string;   
+    iditem: string;   
   }
 
 export interface Creature {
