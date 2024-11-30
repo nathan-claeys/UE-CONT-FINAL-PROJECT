@@ -1,6 +1,6 @@
 import { message, Modal } from "antd";
 import StoreGallery from "./StoreGallery"
-import {getPechakuchonInStore} from "../../services/Store"
+import {getPechakuchonInStore, buyPokechakuchon} from "../../services/Store"
 import { useEffect, useState } from "react";
 
 const StorePokechakuchon: React.FC = () => {
@@ -24,6 +24,7 @@ const StorePokechakuchon: React.FC = () => {
         content: `Voulez-vous vraiment acheter ${item.name} ?`,
         onOk: () => {
           message.success(`Vous avez acheté ${item.name} !`);
+          buyPokechakuchon(item.name);
         },
         onCancel: () => {
           message.info("Achat annulé.");
