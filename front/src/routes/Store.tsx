@@ -1,8 +1,8 @@
 import { Tabs, TabsProps } from "antd"
 
-import StorePage from "../components/StorePage"
-import StorePokechakuchon from "../components/StorePokechakuchon"
-import StoreItem from "../components/StoreItem"
+import StorePage from "../components/store/StorePage"
+import StorePokechakuchon from "../components/store/StorePokechakuchon"
+import StoreItem from "../components/store/StoreItem"
 
 const Store = () => {
 
