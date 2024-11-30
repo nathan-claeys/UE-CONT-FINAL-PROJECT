@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button} from "antd";
 
 interface StoreObjectProps {
   name: string;
@@ -14,7 +14,14 @@ const StoreObjectCase: React.FC<StoreObjectProps> = ({ name, description, onBuy 
       bordered={true}
       style={{ margin: "10px", textAlign: "center" }}
     >
-      <p>{description}</p>
+      <p>
+        {description.split("\n").map((line, index) => (
+          <React.Fragment key={index}>
+            {line}
+            <br />
+          </React.Fragment>
+        ))}
+      </p>
       <Button type="primary" onClick={onBuy}>
         Acheter
       </Button>
