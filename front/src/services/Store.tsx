@@ -68,16 +68,21 @@ const getPechakuchonInStore = async () => {
 }
 
 const getItemsInStore = async () => {
-    return mockdata_items //à remplacer par un appel API
+    //à remplacer par un appel API
+    const res = [];
+    for (const item of mockdata_items) {
+        res.push({name : item.name, description : "Price: " + item.price})
+    }
+    return res
 }
 
-const buyItem = async (id: number) => {
-    console.log("buying item with id: ", id)
+const buyItem = async (id: String) => {
+    console.log("buying item with name: ", id)
     //à remplacer par un appel API
 }
 
-const buyPokechakuchon = async (id: number) => {
-    console.log("buying pokechakuchon with id: ", id)
+const buyPokechakuchon = async (id: String) => {
+    console.log("buying pokechakuchon with name: ", id)
     //à remplacer par un appel API
 }
 
