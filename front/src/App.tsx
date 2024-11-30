@@ -1,36 +1,52 @@
+import { Tabs } from 'antd';
+import TabPane from 'antd/es/tabs/TabPane';
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route,
+  useNavigate,
+  useLocation
 } from 'react-router-dom'
 
-const App = () => {
+const AppTabs = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const padding = {
-    padding: 5
-  }
+  // Détermine l'onglet actif en fonction de l'URL
+  const activeKey = location.pathname;
 
   return (
+    <Tabs
+      activeKey={activeKey}
+      onChange={(key) => navigate(key)} // Change la route quand on change d'onglet
+      tabPosition="left"
+    >
+      <TabPane tab="News" key="/" />
+      <TabPane tab="Social" key="/social" />
+      <TabPane tab="Matches" key="/matches" />
+      <TabPane tab="Store" key="/store" />
+    </Tabs>
+  );
+};
+
+const App = () => {
+  return (
     <Router>
-      <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/social">social</Link>
-        <Link style={padding} to="/matches">matches</Link>
-        <Link style={padding} to="/store">users</Link>
-      </div>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/social" element={<Social />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/store" element={<Store />} />
+      <div style={{ display: "flex", height: "100vh" }}>
+        <div style={{ width: "250px", borderRight: "1px solid #ddd" }}>
+          <AppTabs />
+        </div>
+        <div style={{ flex: 1, padding: "20px" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/social" element={<Social />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/store" element={<Store />} />
       </Routes>
-
-      <div>
-        <i> Clash of Pokechakuchon </i> 
+        </div>
       </div>
     </Router>
-  )
-}
+  );
+};
 
 const Home = () => (
   <div>
