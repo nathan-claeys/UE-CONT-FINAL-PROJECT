@@ -1,4 +1,3 @@
-import { Button } from 'antd';
 import React from 'react';
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
@@ -17,6 +16,14 @@ interface ProfileProps {
   user: User;
 }
 
+interface FriendsProps {
+  friends: string[];
+}
+
+interface ClubsProps {
+  clubs: { name: string, members: number }[];
+}
+
 const Profile: React.FC<ProfileProps> = ({ user }) => (
   // Display info about the user
   <div>
@@ -28,17 +35,21 @@ const Profile: React.FC<ProfileProps> = ({ user }) => (
   </div>
 )
 
-const Friends: React.FC = () => (
+const Friends: React.FC<FriendsProps> = ({ friends }) => (
   <div>
     <h2>Friends</h2>
-    <p>Here you can find your friends</p>
+    {friends.map((friend) => (
+      <p key={friend}>{friend}</p>
+    ))}
   </div>
 )
 
-const Clubs: React.FC = () => (
+const Clubs: React.FC<ClubsProps> = ({ clubs }) => (
   <div>
     <h2>Clubs</h2>
-    <p>Here you can find your clubs</p>
+    {clubs.map((club) => (
+      <p key={club.name}>{club.name} ({club.members} members)</p>
+    ))}
   </div>
 )
 
@@ -51,12 +62,12 @@ const items: TabsProps['items'] = [
   {
     key: '2',
     label: 'Friends',
-    children: <Friends />,
+  children: <Friends friends = {getUserFriends()}/>,
   },
   {
     key: '3',
     label: 'Clubs',
-    children: <Clubs />,
+    children: <Clubs clubs = {getUserClubs()}/>,
   },
 ];
 

@@ -37,26 +37,31 @@ export function getUserProfile() : User {
   return mock_user
 }
 
-export function getUserFriends() : Promise<string[]> {
+export function getUserFriends() : string[] {
   if (use_mock_data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mock_user.friends)
-      }, 1000)
-    })
+    return mock_user.friends
   }
-  return axios.get('/user/friends')
+  axios.get('/user/friends').then((response) => {
+    return response.data
+  }).catch((error) => {
+    console.error(error)
+  }
+  )
+  return mock_user.friends
+  
 }
 
-export function getUserClubs(): Promise<{ name: string, members: number }[]> {
+export function getUserClubs(): { name: string, members: number }[] {
   if (use_mock_data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mock_clubs)
-      }, 1000)
-    })
+    return mock_clubs
   }
-  return axios.get('/user/clubs')
+  axios.get('/user/clubs').then((response) => {
+    return response.data
+  }).catch((error) => {
+    console.error(error)
+  }
+  )
+  return mock_clubs
 }
 
 
