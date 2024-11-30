@@ -5,51 +5,22 @@ The Message Microservice is responsible for handling all messaging-related opera
 
 ## Features
 - Send messages between users
-- Retrieve messages for a user
-- Mark messages as read/unread
+- Retrieve conversation with a user
 - Delete messages
 
 ## Technologies Used
-- **Programming Language:** Python
-- **Framework:** Flask
-- **Database:** PostgreSQL
-- **Messaging Queue:** RabbitMQ
+- **Programming Language:** TypeScript
+- **Framework:** fastify
+- **Database:** json
 - **Containerization:** Docker
 
 ## Getting Started
-
-### Prerequisites
-- Python 3.8+
-- Docker
-- PostgreSQL
-- RabbitMQ
 
 ### Installation
 1. Clone the repository:
     ```bash
     git clone https://github.com/yourusername/message-microservice.git
     cd message-microservice
-    ```
-
-2. Create a virtual environment and activate it:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
-
-3. Install the dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Set up the database:
-    ```bash
-    flask db upgrade
-    ```
-
-5. Run the application:
-    ```bash
-    flask run
     ```
 
 ### Running with Docker
@@ -66,14 +37,14 @@ The Message Microservice is responsible for handling all messaging-related opera
 ## API Endpoints
 
 ### Send a Message
-- **URL:** `/messages`
+- **URL:** `/messages/send`
 - **Method:** `POST`
 - **Request Body:**
     ```json
     {
-        "sender_id": "user1",
         "receiver_id": "user2",
-        "content": "Hello, World!"
+        "content": "Hello, World!",
+        "sent_at":  "2024-11-30"
     }
     ```
 
@@ -81,19 +52,10 @@ The Message Microservice is responsible for handling all messaging-related opera
 - **URL:** `/messages/<user_id>`
 - **Method:** `GET`
 
-### Mark Message as Read
-- **URL:** `/messages/<message_id>/read`
-- **Method:** `PATCH`
-
 ### Delete a Message
 - **URL:** `/messages/<message_id>`
 - **Method:** `DELETE`
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
-
 ## License
 This project is licensed under the MIT License.
 
-## Contact
-For any inquiries, please contact [your-email@example.com].
