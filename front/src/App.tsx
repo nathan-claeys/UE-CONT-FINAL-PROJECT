@@ -6,6 +6,7 @@ import {
   useNavigate,
   useLocation
 } from 'react-router-dom'
+import Social from './routes/Social'
 
 const AppTabs = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const App = () => {
         <div style={{ flex: 1, padding: "20px" }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/social" element={<Social />} />
+          <Route path="/social/*" element={<Social />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/store" element={<Store />} />
       </Routes>
@@ -55,12 +56,7 @@ const Home = () => (
   </div>
 )
 
-const Social = () => (
-  <div>
-    <h2>Social</h2>
-    <p>Here you can find friends and your user profile</p>
-  </div>
-)
+
 
 const Matches = () => (
   <div>
