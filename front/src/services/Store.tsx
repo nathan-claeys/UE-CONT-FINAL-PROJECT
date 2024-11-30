@@ -59,7 +59,12 @@ const mockdata_items = [
 //actual store api call
 
 const getPechakuchonInStore = async () => {
-    return mockdata_pokechakuchon //à remplacer par un appel API
+    //à remplacer par un appel API
+    const res = [];
+    for (const pokechakuchon of mockdata_pokechakuchon) {
+        res.push({name : pokechakuchon.name, description : "Type: " + pokechakuchon.type +"\n"+"   Price: " + pokechakuchon.price})
+    }
+    return res
 }
 
 const getItemsInStore = async () => {
@@ -76,4 +81,4 @@ const buyPokechakuchon = async (id: number) => {
     //à remplacer par un appel API
 }
 
-export default { getPechakuchonInStore, getItemsInStore, buyItem, buyPokechakuchon }
+export { getPechakuchonInStore, getItemsInStore, buyItem, buyPokechakuchon }
