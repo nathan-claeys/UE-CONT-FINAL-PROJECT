@@ -1,26 +1,19 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:latest
-    container_name: mysql-container
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3307:3306"
-    networks:
-      - app-network
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3307:3306" # Expose port 3306
+    volumes:
+      - db_data:/var/lib/mysql
 
 volumes:
-  mysql_data:
-    driver: local
-
-networks:
-  app-network:
-    driver: bridge
+  db_data:
