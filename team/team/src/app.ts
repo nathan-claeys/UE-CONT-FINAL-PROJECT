@@ -2,6 +2,8 @@ import { join } from 'path';
 import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
 import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
 
+import SwaggerUI from "@fastify/swagger-ui";
+
 export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {
 
 }
@@ -31,6 +33,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
     dir: join(__dirname, 'routes'),
     options: opts
   })
+
+  void fastify.register(SwaggerUI, {
+    routePrefix: "/api-docs",
+  }); 
+
 };
 
 export default app;
