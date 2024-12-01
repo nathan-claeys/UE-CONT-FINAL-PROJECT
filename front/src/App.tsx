@@ -1,7 +1,7 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Button } from 'antd';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './helpers/AuthContext';
+import { AuthProvider, useAuth } from './helpers/AuthContext';
 import ProtectedRoute from './components/PrivateRoute';
 import Welcome from './routes/Welcome';
 import Social from './routes/Social';
@@ -12,30 +12,43 @@ import Home from './routes/Home';
 
 const { TabPane } = Tabs;
 
-// Composant pour gérer les onglets
+// Composant pour gérer les onglets et le bouton Logout
 const AppTabs = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
 
   // Détermine l'onglet actif en fonction de l'URL
   const activeKey = location.pathname;
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redirige l'utilisateur vers la page de connexion
+  };
+
   return (
-    <Tabs
-      activeKey={activeKey}
-      onChange={(key) => navigate(key)} // Change la route quand on change d'onglet
-      tabPosition="left"
-    >
-      <TabPane tab="News" key="/home" />
-      <TabPane tab="Social" key="/social" />
-      <TabPane tab="Matches" key="/matches" />
-      <TabPane tab="Store" key="/store" />
-    </Tabs>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Tabs
+        activeKey={activeKey}
+        onChange={(key) => navigate(key)} // Change la route quand on change d'onglet
+        tabPosition="left"
+        style={{ flex: 1 }}
+      >
+        <TabPane tab="News" key="/home" />
+        <TabPane tab="Social" key="/social" />
+        <TabPane tab="Matches" key="/matches" />
+        <TabPane tab="Store" key="/store" />
+      </Tabs>
+      <div style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
+        <Button type="primary" danger block onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+    </div>
   );
 };
 
 // Page Matches
-
 const Matches = () => (
   <div>
     <h2>Matches</h2>
