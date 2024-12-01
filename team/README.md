@@ -43,7 +43,7 @@ body (json) : {idcreature1 : idcreature,
 
 ### Item (les items non équipés du jouer)
 
-Voir les items non équipés du joueur  
+Voir les items du joueur  
 GET : /item
 
 Ajouter un item aux items du joueur  
@@ -55,11 +55,6 @@ DELETE : /item
 body (json) : {idItem: idItem}
 
 Ajouter un item à une créature  
-POST : /item/créature  
-body (json) : {idItem: idItem,
-                idCreature: idCreature}
-
-Ajouter un item à une créature   
 POST : /item/créature  
 body (json) : {idItem: idItem,
                 idCreature: idCreature}

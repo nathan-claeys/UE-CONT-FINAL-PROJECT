@@ -1,5 +1,6 @@
 export interface Item {
-    iditem: string;   
+    iditem: string; 
+    equiped: boolean;   
   }
 
 export interface Creature {
@@ -8,8 +9,16 @@ export interface Creature {
     items? : Item;
   }
 
+export interface Team {
+  n1: Creature;
+  n2: Creature;
+  n3: Creature;
+  n4: Creature;
+  n5: Creature;
+}
+
 export interface UserTeam {
     collectionCreature: Creature[];
-    collectionFreeItem: Item[]; // items non équipés
-    team: Creature[];
+    collectionItem: Item[];
+    team: Team;
   } 
