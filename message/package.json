@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/app.js",
-    "dev": "ts-node --transpileOnly src/app.ts"
+    "build": "tsc",
+    "dev": "ts-node app.ts"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fastify/mysql": "^5.0.1",
     "dotenv": "^16.4.5",
     "fastify": "^5.1.0",
     "fastify-plugin": "^5.0.1",
