@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import * as storeController from '../controllers/storeController';
 import { PurchaseSchema, SellSchema } from '../schemas/storeSchemas';
-import { Type } from '@sinclair/typebox';  // Ajoute cette ligne d'importation
+import { Type } from '@sinclair/typebox';  
 
 const storeRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/store/inventory', {
