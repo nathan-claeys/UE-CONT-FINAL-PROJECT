@@ -1,16 +1,41 @@
-export interface InventoryItem {
-    id: number;
-    type: 'creature' | 'gadget';
-    species?: string;
-    name?: string;
-    price: number;
-  }
-  
-  export interface Transaction {
-    id: number;
-    date: string;
-    user: number;
-    item: InventoryItem;
-    price: number; // Negative for purchase, positive for sale
-  }
-  
+export interface Pokemon {
+  id: string;
+  name: string;
+  cost: number;
+  type: PokemonType;
+  power: number;
+}
+
+export enum PokemonType {
+  NORMAL = 'normal',
+  FIRE = 'fire',
+  WATER = 'water',
+  GRASS = 'grass',
+}
+
+export interface GadgetPower {
+  target: GadgetTarget;
+  points: number;
+}
+
+export enum GadgetTarget {
+  MY_ATTACK = 'MY_ATTACK',
+  OPPONENT_ATTACK = 'OPPONENT_ATTACK',
+  TYPE_IMPACT = 'TYPE_IMPACT',
+  CREDIT = 'CREDIT',
+}
+
+export interface Gadget {
+  id: string;
+  name: string;
+  cost: number;
+  power: GadgetPower;
+}
+
+export interface Transaction {
+  id: string;
+  date: string;
+  user: string;
+  item: Pokemon | Gadget;
+  price: number; // Negative for purchase, positive for sale
+}

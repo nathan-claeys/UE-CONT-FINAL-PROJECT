@@ -1,14 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { InventoryItem, Transaction } from '../interfaces/storeInterfaces';
+//import { Pokemon, Gadget, GadgetTarget, Transaction } from '../interfaces/storeInterfaces';
 import { getInventory, getItemDetails, processPurchase, processSale, getUserTransactions } from '../utils/db';
 
 export const getInventoryHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { type } = request.query as { type: string };
   try {
-    const inventory: InventoryItem[] = await getInventory(type);
+    const inventory = await getInventory();
     reply.send(inventory);
-  } catch (error: unknown) {  // Specify 'unknown' type
-    if (error instanceof Error) {  // Narrowing down the error type
+  } catch (error: unknown) {
+    if (error instanceof Error) {
       reply.internalServerError(error.message);
     } else {
       reply.internalServerError('An unknown error occurred.');
@@ -20,13 +19,13 @@ export const getItemDetailsHandler = async (request: FastifyRequest, reply: Fast
   const { id } = request.params as { id: string };
   try {
     const item = await getItemDetails(id);
-    if (item) {
-      reply.send(item);
-    } else {
+    if (!item) {
       reply.notFound(`Item with ID ${id} not found.`);
+      return;
     }
-  } catch (error: unknown) {  // Specify 'unknown' type
-    if (error instanceof Error) {  // Narrowing down the error type
+    reply.send(item);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
       reply.internalServerError(error.message);
     } else {
       reply.internalServerError('An unknown error occurred.');
@@ -35,61 +34,43 @@ export const getItemDetailsHandler = async (request: FastifyRequest, reply: Fast
 };
 
 export const purchaseItemHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { userId, itemId, type } = request.body as { userId: number, itemId: number, type: string };
+  const { userId, itemId, type } = request.body as { userId: string, itemId: string, type: string };
   try {
-    const transaction: Transaction = await processPurchase(userId, itemId, type);
+    const transaction = await processPurchase(userId, itemId, type);
     reply.send({
       status: 'success',
-      transaction
+      transaction,
     });
-  } catch (error: unknown) {  // Specify 'unknown' type
-    if (error instanceof Error) {  // Narrowing down the error type
-      reply.send({
-        status: 'error',
-        message: error.message
-      });
-    } else {
-      reply.send({
-        status: 'error',
-        message: 'An unknown error occurred.'
-      });
-    }
+  } catch (error) {
+    reply.send({
+      status: 'error',
+      message: (error as Error).message,
+    });
   }
 };
 
 export const sellItemHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { userId, itemId, type } = request.body as { userId: number, itemId: number, type: string };
+  const { userId, itemId, type } = request.body as { userId: string, itemId: string, type: string };
   try {
-    const transaction: Transaction = await processSale(userId, itemId, type);
+    const transaction = await processSale(userId, itemId, type);
     reply.send({
       status: 'success',
-      transaction
+      transaction,
     });
-  } catch (error: unknown) {  // Specify 'unknown' type
-    if (error instanceof Error) {  // Narrowing down the error type
-      reply.send({
-        status: 'error',
-        message: error.message
-      });
-    } else {
-      reply.send({
-        status: 'error',
-        message: 'An unknown error occurred.'
-      });
-    }
+  } catch (error) {
+    reply.send({
+      status: 'error',
+      message: (error as Error).message,
+    });
   }
 };
 
 export const getUserTransactionsHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { userId } = request.query as { userId: number };
+  const { userId } = request.query as { userId: string };
   try {
-    const transactions: Transaction[] = await getUserTransactions(userId);
+    const transactions = await getUserTransactions(userId);
     reply.send(transactions);
-  } catch (error: unknown) {  // Specify 'unknown' type
-    if (error instanceof Error) {  // Narrowing down the error type
-      reply.internalServerError(error.message);
-    } else {
-      reply.internalServerError('An unknown error occurred.');
-    }
+  } catch (error) {
+    reply.internalServerError((error as Error).message);
   }
 };
