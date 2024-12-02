@@ -9,6 +9,7 @@ import Store from './routes/Store';
 import Login from './routes/Login';
 import Register from './routes/Register';
 import Home from './routes/Home';
+import Messages from './routes/Messages';
 
 const { TabPane } = Tabs;
 
@@ -38,6 +39,7 @@ const AppTabs = () => {
         <TabPane tab="Social" key="/social" />
         <TabPane tab="Matches" key="/matches" />
         <TabPane tab="Store" key="/store" />
+        <TabPane tab="Messages" key="/messages" />
       </Tabs>
       <div style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
         <Button type="primary" danger block onClick={handleLogout}>
@@ -113,6 +115,16 @@ const App = () => {
               <ProtectedRoute component={() => (
                 <ProtectedLayout>
                   <Store />
+                </ProtectedLayout>
+              )} />
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute component={() => (
+                <ProtectedLayout>
+                  <Messages />
                 </ProtectedLayout>
               )} />
             }
