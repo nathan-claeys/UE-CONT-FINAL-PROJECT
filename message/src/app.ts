@@ -1,5 +1,5 @@
 import mysql from 'mysql2';
-
+import { createTableQuery } from './db/init.js';
 const connection = mysql.createConnection({
     host: 'localhost',
     port : 3307,
@@ -16,9 +16,13 @@ connection.connect((err) => {
     console.log('Connected to MySQL');
 });
 
-connection.query('SELECT 1 + 1 AS result', (err, results) => {
+connection.query(createTableQuery, (err, results) => {
     if (err) throw err;
     console.log('Query result:', results);
 });
-
+const checkTableQuery = `SHOW TABLES FROM my_database LIKE 'messages'`;
+connection.query(checkTableQuery, (err, results) => {
+    if (err) throw err;
+    console.log('Query result:', results);
+});
 connection.end();
