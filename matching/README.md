@@ -84,20 +84,7 @@ Retrieve global or user-specific match statistics.
 
 ---
 
-### **4. Recherche et matchmaking**
-
-#### `POST /matches/search`
-Search or join a match based on specific criteria.
-- **Request Body**:
-  ```json
-  {
-    "userId": "12345",
-    "criteria": {
-      "matchType": "ranked",
-      "difficulty": "medium"
-    }
-  }
-  ```
+### **4. Match against AI**
 
 #### `POST /matches/ai`
 Create a match against an AI.
