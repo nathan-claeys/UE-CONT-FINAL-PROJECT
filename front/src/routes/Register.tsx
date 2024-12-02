@@ -55,8 +55,8 @@ export default function Register(): JSX.Element {
           </Form.Item>
           <Form.Item
             label="Adresse email"
-            validateStatus={!email.endsWith('@imt-atlantique.net') ? 'error' : ''}
-            help={!email.endsWith('@imt-atlantique.net') ? 'L\'adresse email doit se terminer par "@imt-atlantique.net".' : ''}
+            validateStatus={!email.endsWith('.fr') ? 'error' : ''}
+            help={!email.endsWith('.fr') ? 'L\'adresse email doit se terminer par ".fr".' : ''}
           >
             <Input
               type="email"
