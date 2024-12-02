@@ -1,37 +1,42 @@
+import { FastifyPluginAsync } from 'fastify';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUI from '@fastify/swagger-ui';
+import AutoLoad from '@fastify/autoload';
 import { join } from 'path';
-import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
-import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
 
-export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {
+const app: FastifyPluginAsync = async (fastify, opts) => {
+  // Configuration Swagger
+  await fastify.register(fastifySwagger, {
+    openapi: {
+      info: {
+        title: 'Clash Of Pokéchakucha Store API',
+        description: 'Documentation OpenAPI pour le microservice Store',
+        version: '1.0.0',
+      },
+      servers: [
+        {
+          url: 'http://localhost:3000',
+          description: 'Serveur local',
+        },
+      ],
+    },
+  });
 
-}
-// Pass --options via CLI arguments in command to enable these options.
-const options: AppOptions = {
-}
+  await fastify.register(fastifySwaggerUI, {
+    routePrefix: '/docs', // Documentation accessible via /docs
+    staticCSP: true,
+  });
 
-const app: FastifyPluginAsync<AppOptions> = async (
-    fastify,
-    opts
-): Promise<void> => {
-  // Place here your custom code!
-
-  // Do not touch the following lines
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
-  void fastify.register(AutoLoad, {
+  // Autoload des plugins et des routes
+  await fastify.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
-    options: opts
-  })
+    options: opts,
+  });
 
-  // This loads all plugins defined in routes
-  // define your routes in one of these
-  void fastify.register(AutoLoad, {
+  await fastify.register(AutoLoad, {
     dir: join(__dirname, 'routes'),
-    options: opts
-  })
+    options: opts,
+  });
 };
 
 export default app;
-export { app, options }
