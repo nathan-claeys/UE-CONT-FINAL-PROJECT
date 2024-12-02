@@ -41,6 +41,25 @@ async function team(fastify: FastifyInstance) {
           }
         }, }, t.addToTeam)
     
+    fastify.delete('/:userId', {
+        schema: {
+        description: 'Remove a creature from the team',
+        tags: ['creatures'],
+        response: {
+            201: {
+            description: 'List of creatures in the team',
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' }
+                }
+            }
+            }
+        }
+        }, }, t.removeFromTeam)
+    
 }
 
 export default team

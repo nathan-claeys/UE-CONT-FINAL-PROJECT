@@ -61,3 +61,40 @@ try {
     return reply.status(500).send({ error: "An error occurred while adding to collection" });
 }
 };
+
+export const removeFromTeam = async (
+    req: FastifyRequest<{Params: { userId: string}, Body: { idcreature: string; idespece: string } }>,
+    reply: FastifyReply
+    ) => {
+    const { userId } = req.params;
+    const { idcreature, idespece } = req.body;
+    
+    // Vérifie les champs obligatoires
+    if (!idcreature || !idespece) {
+        return reply.status(400).send({ error: "idcreature and idespece are required" });
+    }
+    
+    try {
+        // Récupère les données utilisateur
+        const userData = getUserData(userId);
+        const userTeam: Team = userData["team"]
+    
+        for (const ncreature of ["n1", "n2", "n3", "n4", "n5"]) {
+            if (userTeam[ncreature]["idcreature"]== idcreature && userTeam[ncreature]["idespece"]== idespece) {
+                userTeam[ncreature]={
+                    idcreature:"",
+                    idespece:""
+                }
+                saveUserData(userId, userData);
+                return reply.status(201).send(userData["team"]);
+            }
+        }
+    
+        
+        return reply.status(400).send({ error: "Creature not in team : cannot be removed from the team" });
+        
+    } catch (error) {
+        console.error(error);
+        return reply.status(500).send({ error: "An error occurred while removing from team" });
+    }
+    };
