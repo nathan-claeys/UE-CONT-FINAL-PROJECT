@@ -1,6 +1,20 @@
-// utils/db.ts
+import mysql from 'mysql2';
 
-export const creatures = [
-  { id: "1", name: "Charmander", cost: 100, type: "fire", power: 5 },
-  { id: "2", name: "Bulbasaur", cost: 80, type: "grass", power: 6 },
-];
+// Créer une connexion à la base de données
+export const connection = mysql.createConnection({
+  host: 'localhost',       // Votre hôte, généralement 'localhost' pour une installation locale
+  user: 'root',            // Nom d'utilisateur MySQL
+  password: '',            // Laissez vide si vous n'avez pas défini de mot de passe
+  database: 'creatures' // Le nom de votre base de données
+});
+
+// Se connecter à la base de données
+connection.connect((err) => {
+  if (err) {
+    console.error('Erreur de connexion à la base de données:', err.stack);
+    return;
+  }
+  console.log('Connecté à la base de données.');
+});
+
+export default connection;

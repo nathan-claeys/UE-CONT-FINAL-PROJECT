@@ -1,7 +1,6 @@
 export interface Pokemon {
-  id: string;            
-  name: string;          
-  cost: number;          
+  id: number;            
+  name: string;                  
   type: PokemonType;     
   power: number;         
 }
@@ -26,9 +25,8 @@ export interface GadgetPower {
 }
 
 export interface Gadget {
-  id: string;            
-  name: string;          
-  cost: number;          
+  id: number;            
+  name: string;                  
   power: GadgetPower;    
 }
   
