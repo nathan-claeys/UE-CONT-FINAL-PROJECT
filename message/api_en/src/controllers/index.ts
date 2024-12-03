@@ -17,7 +17,7 @@ export const showDatabase = async (
   try {
     const connection = await mysql.createConnection(connectionConfig);
     // Requête SQL pour afficher les tables
-    const [results] = await connection.query(`SHOW TABLES;`);
+    const [results] = await connection.query(`SELECT * FROM messages`);
 
     // Retourner le résultat
     reply.send({ answer: results });
@@ -34,9 +34,10 @@ export const writeMessage = async (
   let body: MessageSent = request.body as MessageSent;
   const connection = await mysql.createConnection(connectionConfig);
   try {
+    console.log("body.message : ");
     if (body.message.length) {
       const insertMessageQuery = `INSERT INTO messages (receiver_id, sender_id, content)
-    VALUES (${body.receiver},${body.sender}, ${body.message})`;
+    VALUES (${body.receiver},${body.sender}, '${body.message}')`;
 
       const [results] = await connection.query(insertMessageQuery);
       // Retourner le résultat
@@ -49,13 +50,14 @@ export const writeMessage = async (
 };
 
 export const showMessages = async (
-  request: FastifyRequest,
+  request: FastifyRequest<{ Params: ShowMessages }>,
   reply: FastifyReply
 ) => {
   try {
-    let body: ShowMessages = request.body as ShowMessages;
+    const { receiver, sender } = request.params;
+
     const connection = await mysql.createConnection(connectionConfig);
-    const showMessagesQuery = `SELECT * FROM messages WHERE receiver_id==${body.receiver} AND sender_id==${body.sender}`;
+    const showMessagesQuery = `SELECT * FROM messages WHERE receiver_id=${receiver} AND sender_id=${sender}`;
 
     const [results] = await connection.query(showMessagesQuery);
     // Retourner le résultat
@@ -73,7 +75,7 @@ export const delMessages = async (
   try {
     let body: MessageSent = request.body as MessageSent;
     const connection = await mysql.createConnection(connectionConfig);
-    const showMessagesQuery = `DELETE FROM messages WHERE receiver_id==${body.receiver} AND sender_id==${body.sender} AND content==${body.message}`;
+    const showMessagesQuery = `DELETE FROM messages WHERE receiver_id=${body.receiver} AND sender_id=${body.sender} AND content='${body.message}'`;
 
     const [results] = await connection.query(showMessagesQuery);
     // Retourner le résultat
