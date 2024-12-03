@@ -17,9 +17,9 @@ const mock_user: User = {
 }
 
 const mock_clubs = [
-  { name: 'Ligue Pokéchakuchon', members: 12 },
-  { name: 'Club des cinq', members: 5 },
-  { name: 'Club de golf', members: 3 }
+  { id: 1, name: 'Ligue Pokéchakuchon', members: 12 },
+  { id: 2, name: 'Club des cinq', members: 5 },
+  { id: 3, name: 'Club de golf', members: 3 }
 ]
 
 const use_mock_data = true
@@ -51,7 +51,7 @@ export function getUserFriends() : string[] {
   
 }
 
-export function getUserClubs(): { name: string, members: number }[] {
+export function getUserClubs(): { id: number, name: string, members: number }[] {
   if (use_mock_data) {
     return mock_clubs
   }
@@ -64,4 +64,34 @@ export function getUserClubs(): { name: string, members: number }[] {
   return mock_clubs
 }
 
+export function joinClub(club_id: number): { id: number, name: string, members: number } {
+  axios.post(`/user/clubs/${club_id}/join`).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.error(error)
+  }
+  )
+  return mock_clubs.find((club) => club.id === club_id) as { id: number, name: string, members: number }
+}
 
+export function getMyClub(): { id: number, name: string, members: number } | null {
+  if (use_mock_data) {
+    return mock_clubs[0]
+  }
+  axios.get('/user/myclub').then((response) => {
+    return response.data
+  }).catch((error) => {
+    console.error(error)
+  }
+  )
+  return null
+}
+
+export function leaveClub(): void {
+  axios.post(`/user/clubs/leave`).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.error(error)
+  }
+  )
+}

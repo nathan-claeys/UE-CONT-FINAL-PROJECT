@@ -1,8 +1,9 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Button, Flex } from 'antd';
 import type { TabsProps } from 'antd';
-import { getUserProfile, getUserFriends, getUserClubs, User } from '../services/Social';
+import { getUserProfile, getUserFriends, getUserClubs, User, getMyClub, leaveClub } from '../services/Social';
 
+import { joinClub } from '../services/Social';
 
 
 const Social: React.FC = () => (
@@ -21,7 +22,7 @@ interface FriendsProps {
 }
 
 interface ClubsProps {
-  clubs: { name: string, members: number }[];
+  clubs: { id: number, name: string, members: number }[];
 }
 
 const Profile: React.FC<ProfileProps> = ({ user }) => (
@@ -44,14 +45,31 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => (
   </div>
 )
 
-const Clubs: React.FC<ClubsProps> = ({ clubs }) => (
+const Clubs: React.FC<ClubsProps> = ({ clubs }) => {
+
+  const [myClub, setMyClub] = React.useState<{ id: number, name: string, members: number } | null>(getMyClub());
+  
+  return (
   <div>
     <h2>Clubs</h2>
+    <h3>My club</h3>
+    {myClub ? (
+      <Flex gap={"middle"}>
+        <p>{myClub.name} ({myClub.members} members)</p>
+        <Button onClick={() => {leaveClub();setMyClub(null)}}>Leave</Button>
+      </Flex>
+    ) : (
+      <p>You are not in a club</p>
+    )}
+    <h3>Available clubs</h3>
     {clubs.map((club) => (
-      <p key={club.name}>{club.name} ({club.members} members)</p>
+      <Flex gap={"middle"} key={club.name}>
+        <p>{club.name} ({club.members} members)</p>
+        <Button onClick={() => setMyClub(joinClub(club.id))}>Join</Button>
+      </Flex>
     ))}
   </div>
-)
+)}
 
 const items: TabsProps['items'] = [
   {
