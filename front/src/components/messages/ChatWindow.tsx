@@ -37,7 +37,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, conversation }) =
   };
 
   if (!selectedUser) {
-    return <Text>Veuillez sélectionner un utilisateur pour commencer une conversation.</Text>;
+    return <Text>Select a user to start a conversation.</Text>;
   }
 
   return (
@@ -50,7 +50,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, conversation }) =
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onPressEnter={handleSend}
-          placeholder="Écrivez votre message..."
+          placeholder="Write your message..."
         />
         <Button type="primary" onClick={handleSend} style={{ marginLeft: "10px" }}>
           Envoyer

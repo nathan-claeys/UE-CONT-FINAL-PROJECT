@@ -23,7 +23,7 @@ const StoreObjectCase: React.FC<StoreObjectProps> = ({ name, description, onBuy 
         ))}
       </p>
       <Button type="primary" onClick={onBuy}>
-        Acheter
+        Buy
       </Button>
     </Card>
   );
