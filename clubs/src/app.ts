@@ -15,9 +15,7 @@ const db = mysql.createPool({
 
 // POST endpoint to add a new club
 app.post("/clubs", async (request, reply) => {
-  // Type assertion: Assert the type of request.body
-  const { name, users } = request.body as { name: string; users: any }; // Here we're asserting the type of request.body
-
+  const { name, users } = request.body as { name: string; users: any }; 
   try {
     // Use the promise-based API for inserting the club
     const [results] = await db.promise().query(
@@ -25,16 +23,14 @@ app.post("/clubs", async (request, reply) => {
       [name, JSON.stringify(users)] // Convert users to JSON string
     );
 
-    // The result is an array where the first element is a ResultSetHeader
     const insertId = (results as mysql.ResultSetHeader).insertId;
 
-    // Respond with the inserted club's ID and details
     reply.code(201).send({
       message: `Club added with ID: ${insertId}`,
       club: { id: insertId, name, users },
     });
   } catch (error) {
-    app.log.error(error); // Log the error for debugging
+    app.log.error(error); 
     reply.status(500).send({ error: "Failed to add club" });
   }
 });
