@@ -147,7 +147,6 @@ app.delete("/clubs/:id/members/:memberId", async (request, reply) => {
   const { id, memberId } = request.params as { id: string; memberId: string };
 
   try {
-    // Check if the club exists
     const [clubRows] = await db
       .promise()
       .query<mysql.RowDataPacket[]>("SELECT * FROM clubs WHERE id = ?", [id]);
@@ -156,7 +155,6 @@ app.delete("/clubs/:id/members/:memberId", async (request, reply) => {
       return reply.status(404).send({ error: "Club not found" });
     }
 
-    // Check if the user exists in the club
     const [memberRows] = await db
       .promise()
       .query<mysql.RowDataPacket[]>(
@@ -183,6 +181,79 @@ app.delete("/clubs/:id/members/:memberId", async (request, reply) => {
   }
 });
 
+
+// GET endpoint to fetch a club by name
+// eg http://127.0.0.1:3000/clubs/by-name?name=club1
+app.get("/clubs/by-name", async (request, reply) => {
+  const { name } = request.query as { name: string };
+
+  if (!name) {
+    return reply.status(400).send({ error: "Name is required" });
+  }
+
+  try {
+    const [rows] = await db
+      .promise()
+      .query<mysql.RowDataPacket[]>("SELECT * FROM clubs WHERE name = ?", [name]);
+
+    if (rows.length === 0) {
+      return reply.status(404).send({ error: "Club not found" });
+    }
+
+    reply.send(rows[0]); // Return the first matching club
+  } catch (error) {
+    console.error("Error fetching club by name:", error);
+    reply.status(500).send({ error: "Failed to fetch club by name" });
+  }
+});
+
+// GET endpoint to fetch a club by ID
+app.get("/clubs/:id", async (request, reply) => {
+  const { id } = request.params as { id: string };
+
+  try {
+    const [rows] = await db
+      .promise()
+      .query<mysql.RowDataPacket[]>("SELECT * FROM clubs WHERE id = ?", [id]);
+
+    if (rows.length === 0) {
+      return reply.status(404).send({ error: "Club not found" });
+    }
+
+    reply.send(rows[0]); 
+  } catch (error) {
+    console.error("Error fetching club by ID:", error);
+    reply.status(500).send({ error: "Failed to fetch club by ID" });
+  }
+});
+
+
+// GET endpoint to fetch the creator of a club
+app.get("/clubs/:id/creator", async (request, reply) => {
+  const { id } = request.params as { id: string };
+
+  try {
+    const [rows] = await db
+      .promise()
+      .query<mysql.RowDataPacket[]>(
+        "SELECT user_id, user_name FROM club_members WHERE club_id = ? AND creator = 1",
+        [id]
+      );
+
+    // Check if a creator exists
+    if (rows.length === 0) {
+      return reply.status(404).send({ error: "Creator not found for this club" });
+    }
+
+    reply.send({
+      club_id: id,
+      creator: rows[0], // Assuming only one creator exists per club
+    });
+  } catch (error) {
+    console.error("Error fetching creator:", error);
+    reply.status(500).send({ error: "Failed to fetch club creator" });
+  }
+});
 
 
 // Start the Fastify app
