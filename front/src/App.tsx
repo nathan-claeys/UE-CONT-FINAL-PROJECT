@@ -33,7 +33,12 @@ const AppTabs = () => {
         activeKey={activeKey}
         onChange={(key) => navigate(key)} // Change la route quand on change d'onglet
         tabPosition="left"
-        style={{ flex: 1 }}
+        style={{ flex: 1, overflow: 'hidden', }}
+        tabBarStyle={{
+          width: '100%',
+          margin: 0,
+          padding: 0,
+        }}
       >
         <TabPane tab="News" key="/home" />
         <TabPane tab="Social" key="/social" />
