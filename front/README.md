@@ -48,6 +48,30 @@ export default tseslint.config({
   },
 })
 ```
+
+## First start
+
+### Start user service for authentification for dev
+
+cd user
+docker-compose up -d
+npm install
+npm run dev
+
+### Start front service
+
+#### For dev
+
+cd front
+npm install
+npm run dev
+
+#### For normal use
+
+cd front 
+docker build -t pokechakucha-front:1.0.0 .
+docker run -p 5173:3000  pokechakucha-front:1.0.0
+
 ## Contact
 
 For issues or questions, contact:
