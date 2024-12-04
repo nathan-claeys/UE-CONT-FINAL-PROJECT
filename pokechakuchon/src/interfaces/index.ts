@@ -19,14 +19,11 @@ export enum GadgetTarget {
   CREDIT = "CREDIT",
 }
   
-export interface GadgetPower {
-  target: GadgetTarget;  
-  points: number;       
-}
 
 export interface Gadget {
   id: number;            
-  name: string;                  
-  power: GadgetPower;    
+  name: string;  
+  target: GadgetTarget;  
+  points: number;             
 }
   
