@@ -99,3 +99,9 @@ export function leaveClub(): void {
   }
   )
 }
+
+export const createClub = async (name: string) => {
+  if (!name) throw new Error("Club name cannot be empty.");
+  console.log(`Created club: ${name}`);
+  return new Promise<void>((resolve) => setTimeout(resolve, 1000));
+};
