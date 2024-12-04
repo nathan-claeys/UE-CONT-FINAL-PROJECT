@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tabs, Button, Flex } from 'antd';
 import type { TabsProps } from 'antd';
 import { getUserProfile, getUserFriends, getUserClubs, User, getMyClub, leaveClub } from '../services/Social';
@@ -13,10 +13,6 @@ const Social: React.FC = () => (
   </div>
 )
 
-interface ProfileProps {
-  user: User;
-}
-
 interface FriendsProps {
   friends: string[];
 }
@@ -25,16 +21,28 @@ interface ClubsProps {
   clubs: { id: number, name: string, members: number }[];
 }
 
-const Profile: React.FC<ProfileProps> = ({ user }) => (
-  // Display info about the user
-  <div>
-    <h2>Profile</h2>
-    <p>Name: {user.name}</p>
-    <p>Email: {user.email}</p>
-    <p>Age: {user.age}</p>
-    <p>Badges: {user.badges.join(', ')}</p>
-  </div>
-)
+const Profile: React.FC = () => {
+  
+  const [user, setUser] = React.useState<User | undefined>();
+
+  useEffect(() => {
+    getUserProfile().then((profile) => setUser(profile));
+  }, []);
+  
+  return (
+    <>
+      {user && 
+        <div>
+          <h2>Profile</h2>
+          <p>Name: {user.name}</p>
+          <p>Email: {user.email}</p>
+          <p>Date de création: {user.createdAt}</p>
+          <p>Badges: {user.badges.join(', ')}</p>
+        </div>
+      }
+    </>
+  )
+}
 
 const Friends: React.FC<FriendsProps> = ({ friends }) => (
   <div>
@@ -75,7 +83,7 @@ const items: TabsProps['items'] = [
   {
     key: '1',
     label: 'Profile',
-    children: <Profile user = {getUserProfile()} />,
+    children: <Profile/>,
   },
   {
     key: '2',
