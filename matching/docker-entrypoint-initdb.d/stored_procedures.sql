@@ -61,14 +61,14 @@ END $$
 CREATE PROCEDURE AddRoundToMatch(
     IN p_matchId INT,
     IN p_roundNumber INT,
-    IN p_player1Pokéchakuchon INT,
-    IN p_player2Pokéchakuchon INT,
+    IN p_player1Pokechakuchon INT,
+    IN p_player2Pokechakuchon INT,
     IN p_player1Gadget INT,
     IN p_player2Gadget INT
 )
 BEGIN
-    INSERT INTO rounds (match_id, round_number, player1_pokéchakuchon_id, player2_pokéchakuchon_id, player1_gadget_id, player2_gadget_id)
-    VALUES (p_matchId, p_roundNumber, p_player1Pokéchakuchon, p_player2Pokéchakuchon, p_player1Gadget, p_player2Gadget);
+    INSERT INTO rounds (match_id, round_number, player1_pokechakuchon_id, player2_pokechakuchon_id, player1_gadget_id, player2_gadget_id)
+    VALUES (p_matchId, p_roundNumber, p_player1Pokechakuchon, p_player2Pokechakuchon, p_player1Gadget, p_player2Gadget);
     SELECT * FROM rounds WHERE id = LAST_INSERT_ID();
 END $$
 
@@ -83,6 +83,3 @@ END $$
 
 -- Reset delimiter back to default ;
 DELIMITER ;
-
-
-

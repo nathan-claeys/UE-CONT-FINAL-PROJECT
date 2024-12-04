@@ -16,8 +16,8 @@ CREATE TABLE rounds (
                         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Auto-incrementing integer ID
                         match_id INT NOT NULL,
                         round_number INT NOT NULL,
-                        player1_pokéchakuchon_id INT NOT NULL, -- Foreign key to Pokéchakuchon table
-                        player2_pokéchakuchon_id INT NOT NULL, -- Foreign key to Pokéchakuchon table
+                        player1_pokechakuchon_id INT NOT NULL, -- Foreign key to Pokéchakuchon table
+                        player2_pokechakuchon_id INT NOT NULL, -- Foreign key to Pokéchakuchon table
                         player1_gadget_id INT, -- Foreign key to Gadget table
                         player2_gadget_id INT, -- Foreign key to Gadget table
                         winner_id VARCHAR(255),
