@@ -44,33 +44,82 @@ The Message Microservice is responsible for handling all messaging-related opera
 
 ### Send a Message
 
-- **URL:** `/messages/send`
-- **Method:** `POST`
-- **Request Body:**
+- **URL:** `/messages`
+- **Method:** `GET`
+- **Return:**
+
   ```json
   {
-    "receiver": 10,
-    "sender": 741,
+    "messages": [
+      {
+        "id":1,
+        "receiver_id":"@ewwweee09072002",
+        "sender_id":"@medhi1021235",
+        "content":"Hello world",
+        "date":"YYYY-MM-DDTHH:MM:SS.sssZ",
+      },
+      ...
+    ]
+  }
+  ```
+
+- **URL:** `/messages/send_message`
+- **Method:** `POST`
+- **Request Body:**
+
+  ```json
+  {
+    "receiver": "@ewwweee09072002",
+    "sender": "@mehdhi1021235",
     "message": "Hello world"
   }
   ```
 
-### Retrieve Messages
+- **Return:**
 
-- **URL:** `/messages/show_messages`
-- **Method:** `GET`
   ```json
   {
-    "user": 10,
-    "receiver": 10
+    "result": "The message was added to the database"
   }
   ```
 
+- **Results:**
+  - 200 : Successful
+  - 402 : Failed to retrieve database tables
+
+### Retrieve Messages
+
+- **URL:** `/messages/show_message_user/:receiver/sender/:sender`
+- **Method:** `GET`
+- **Return:**
+
+```json
+{
+  "messages": [
+    {
+      "id":1,
+      "receiver_id":"@ewwweee09072002",
+      "sender_id":"@medhi1021235",
+      "content":"Hello world",
+      "date":"YYYY-MM-DDTHH:MM:SS.sssZ",
+    },
+    ...
+  ]
+}
+```
+
 ### Delete a Message
 
-- **URL:** `/messages/<message_id>`
+- **URL:** `/delete_message/:id_message`
 - **Method:** `DELETE`
+- **Results:**
+  - 200 : Successful
+  - 402 : Failed to retrieve database tables
 
 ## License
 
 This project is licensed under the MIT License.
+
+```
+
+```
