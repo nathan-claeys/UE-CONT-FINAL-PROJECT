@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const serverUrl = "http://localhost:3000";
+const clubURL = "http://localhost:3001";
 
 export interface User {
   name: string;
@@ -55,17 +56,29 @@ export function getUserFriends() : string[] {
   
 }
 
-export function getUserClubs(): { id: number, name: string, members: number }[] {
-  if (use_mock_data) {
-    return mock_clubs
-  }
-  axios.get('/user/clubs').then((response) => {
+export async function getClubs(): Promise<{ id: number, name: string, members: number }[]> {
+  return axios.get(`${clubURL}/clubs`).then((response) => {
     return response.data
   }).catch((error) => {
     console.error(error)
   }
   )
-  return mock_clubs
+}
+
+export async function createClub(name: string): Promise<{ id: number, name: string, members: number }> {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  try {
+    const response = await axios.post(`${clubURL}/clubs`, {
+      name, user: {
+        id: user.id,
+        name: user.name,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return { id: 0, name, members: 1 }
 }
 
 export function joinClub(club_id: number): { id: number, name: string, members: number } {
