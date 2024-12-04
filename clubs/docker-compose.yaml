@@ -1,0 +1,24 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules # Prevent overwriting `node_modules`
+      - ./dist:/app/dist # Ensure the `dist` folder is mapped for TypeScript output
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    command: sh -c "npx tsc && node dist/app.js" # Compile TypeScript and run the app
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+volumes:
+  db_data: # Volume definition for persisting data
