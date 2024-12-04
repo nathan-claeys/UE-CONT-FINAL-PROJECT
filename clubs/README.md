@@ -2,6 +2,14 @@
 
 This Fastify-based microservice provides endpoints to manage clubs and their members, backed by a MySQL database.
 
+## How to start the app
+
+In the /clubs folder:
+
+```bash
+docker-compose up --build
+```
+
 ## Endpoints Overview
 
 1. **Add a Club**
