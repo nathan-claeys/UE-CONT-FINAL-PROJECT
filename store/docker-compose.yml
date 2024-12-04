@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build: . # Construire l'image à partir du Dockerfile existant
+    container_name: store_app
+    ports:
+      - "3000:3000" # Port exposé pour accéder à l'application
+    environment:
+      NODE_ENV: production # Définir des variables d'environnement
+    depends_on:
+      - mysql_store_service # S'assure que MySQL démarre avant l'application
+    networks:
+      - app_network # Connecte au réseau défini
+
+  mysql_store_service:
+    image: mysql:8.0 # Utilise l'image MySQL officielle
+    container_name: mysql_store_service
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: store_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306" # Port exposé pour MySQL
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app_network # Connecte au réseau défini
+
+volumes:
+  mysql_data: # Définit un volume pour MySQL afin de persister les données
+
+networks:
+  app_network: # Définit un réseau partagé
