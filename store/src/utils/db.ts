@@ -3,7 +3,7 @@ import * as mysql from 'mysql2/promise';
 
 // Create a database connection pool
 export const pool = mysql.createPool({
-  host: 'localhost',
+  host: 'host.docker.internal',
   user: 'root',
   password: '',
   database: 'store_service',
