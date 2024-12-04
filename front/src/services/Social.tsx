@@ -1,9 +1,11 @@
 import axios from 'axios'
 
+const serverUrl = "http://localhost:3000";
+
 export interface User {
   name: string;
   email: string;
-  age: number;
+  createdAt?: number;
   badges: string[];
   friends: string[];
 }
@@ -11,7 +13,6 @@ export interface User {
 const mock_user: User = {
   name: 'Sacha du Bourg Palette',
   email: 'sacha@bourgpalette.jp',
-  age: 12,
   badges: ['eau', 'feu', 'terre', 'air'],
   friends: ['Ondine', 'Pierre'],
 }
@@ -24,17 +25,20 @@ const mock_clubs = [
 
 const use_mock_data = true
 
-export function getUserProfile() : User {
-  if (use_mock_data) {
-    return mock_user
+export async function getUserProfile() : Promise<User> {
+  try {
+    const response = await axios.get(`${serverUrl}/users/me`);
+    return {
+      name: response.data.username,
+      email: response.data.email,
+      createdAt: response.data.createdAt,
+      badges: mock_user.badges,
+      friends: mock_user.friends,
+    };
+  } catch (error) {
+    console.error(error);
+    return mock_user; // or throw an error
   }
-  axios.get('/user/profile').then((response) => {
-    return response.data
-  }).catch((error) => {
-    console.error(error)
-  }
-  )
-  return mock_user
 }
 
 export function getUserFriends() : string[] {

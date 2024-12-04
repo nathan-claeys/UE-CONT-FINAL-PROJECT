@@ -14,8 +14,8 @@ export default function Register(): JSX.Element {
   const navigate = useNavigate();
 
   const handleSubmit = async (): Promise<void> => {
-    if (!email.endsWith('.fr')) {
-      message.error('L\'adresse email doit se terminer par ".fr".');
+    if (!email.endsWith('@imt-atlantique.net')) {
+      message.error('L\'adresse email doit se terminer par "@imt-atlantique.net".');
       return;
     }
 
@@ -55,8 +55,8 @@ export default function Register(): JSX.Element {
           </Form.Item>
           <Form.Item
             label="Adresse email"
-            validateStatus={!email.endsWith('.fr') ? 'error' : ''}
-            help={!email.endsWith('.fr') ? 'L\'adresse email doit se terminer par ".fr".' : ''}
+            validateStatus={!email.endsWith('@imt-atlantique.net') ? 'error' : ''}
+            help={!email.endsWith('@imt-atlantique.net') ? 'L\'adresse email doit se terminer par "@imt-atlantique.net".' : ''}
           >
             <Input
               type="email"
