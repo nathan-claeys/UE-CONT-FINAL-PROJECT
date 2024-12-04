@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .  # Construit l'application à partir du Dockerfile dans le répertoire courant
+    ports:
+      - "3000:3001"  # Expose le port 3000 de l'application sur le port 3001 de la machine hôte
+    environment:
+      DB_HOST: db                  # Hôte de la base de données (nom du service `db`)
+      DB_USER: pokemon_user               # Utilisateur de la base de données
+      DB_PASSWORD: pokemon_password       # Mot de passe de l'utilisateur
+      DB_NAME: creatures                  # Nom de la base de données
+    depends_on:
+      - db                                # L'application attend que le service `db` démarre
+    command: sh -c "npm install && npm run build:ts && npm start"  # Commande pour démarrer l'application
+    restart: always                       # Redémarre l'application automatiquement en cas d'échec
+
+  db:
+    image: mysql:8.0                       # Image MySQL version 8.0
+    ports:
+      - "3306:3307"                        # Expose le port 3306 de MySQL sur le port 3307 de la machine hôte
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password   # Mot de passe pour l'utilisateur `root`
+      MYSQL_DATABASE: creatures            # Nom de la base de données
+      MYSQL_USER: pokemon_user             # Création de l'utilisateur non-root
+      MYSQL_PASSWORD: pokemon_password     # Mot de passe pour l'utilisateur non-root
+    volumes:
+      - db_data:/var/lib/mysql             # Volume persistant pour stocker les données MySQL
+      - ./db/creatures.sql:/docker-entrypoint-initdb.d/creatures.sql  # Script SQL pour initialiser la DB
+    restart: always                        # Redémarre le conteneur automatiquement en cas d'échec
+
+volumes:
+  db_data:  # Volume pour les données de la base de données
