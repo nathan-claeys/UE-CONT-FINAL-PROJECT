@@ -18,14 +18,59 @@ services:
     networks:
       - proxy
   team:
-    image: team:v1
+    image: team
     labels:
       - "traefik.http.routers.team.rule=Host(`team.localhost`)"
       - "traefik.port=3000"
     networks:
+      - proxy
+  club:
+    image: club
+    networks:
+      - internal
+  front:
+    image: front
+    networks:
+      - external
+  matching:
+    image: matching
+    labels:
+      - "traefik.http.routers.matching.rule=Host(`matching.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+  message:
+    image: message
+    networks:
+      - internal
+  pokechakuchon:
+    image: pokechakuchon
+    networks:
+      - internal
+  store:
+    image: store
+    labels:
+      - "traefik.http.routers.store.rule=Host(`store.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+  user:
+    image: user
+    labels:
+      - "traefik.http.routers.user.rule=Host(`user.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
       - proxy
 
 
 networks:
   proxy:
     driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+  external:
+    driver: host
