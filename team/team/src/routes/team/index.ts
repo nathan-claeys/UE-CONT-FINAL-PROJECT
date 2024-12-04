@@ -3,22 +3,82 @@ import * as t from '../../controller/teamController'
 
 async function team(fastify: FastifyInstance) {
 
+  fastify.addSchema({
+    $id: 'Creature',
+    type: 'object',
+    properties: {
+      idcreature: {type: 'string'},
+      idespece: {type: 'string'},
+      item: {type: 'string'},
+    },
+    required: ['idcreature', 'idespece'],
+  })
+
+  fastify.addSchema({
+    $id: 'Team',
+    type: 'object',
+    properties: {
+      n1: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+      n2: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+      n3: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+      n4: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+      n5: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+    },
+    required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+  })
+
   fastify.get('/:userId', {
     schema: {
       description: 'Get all creatures in the team',
       tags: ['creatures'],
       response: {
-        201: {
+        200: {
           description: 'List of creatures in the team',
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              idcreature: { type: 'string' },
-              idespece: { type: 'string' }
-            }
-          }
-        }
+          type: 'object',
+          properties: {
+            n1: {
+              type: 'object',
+              properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' },
+              },
+              required: ['idcreature', 'idespece'],
+            },
+            n2: {
+              type: 'object',
+              properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' },
+              },
+              required: ['idcreature', 'idespece'],
+            },
+            n3: {
+              type: 'object',
+              properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' },
+              },
+              required: ['idcreature', 'idespece'],
+            },
+            n4: {
+              type: 'object',
+              properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' },
+              },
+              required: ['idcreature', 'idespece'],
+            },
+            n5: {
+              type: 'object',
+              properties: {
+                idcreature: { type: 'string' },
+                idespece: { type: 'string' },
+              },
+              required: ['idcreature', 'idespece'],
+            },
+          },
+          required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+        },
       }
     }, }, t.getTeam)
 
@@ -37,17 +97,55 @@ async function team(fastify: FastifyInstance) {
           response: {
             201: {
               description: 'List of creatures in the team',
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  idcreature: { type: 'string' },
-                  idespece: { type: 'string' }
-                }
-              }
+              type: 'object',
+              properties: {
+                n1: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n2: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n3: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n4: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n5: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+              },
+              required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+            },
+          },
             }
-          }
-        }, }, t.addToTeam)
+          },
+        t.addToTeam)
     
     fastify.delete('/:userId', {
         schema: {
@@ -61,19 +159,55 @@ async function team(fastify: FastifyInstance) {
             },
             required: ['idcreature', 'idespece']
           },
-        response: {
+          response: {
             201: {
-            description: 'List of creatures in the team',
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' }
-                }
-            }
-            }
-        }
+              description: 'List of creatures in the team',
+              type: 'object',
+              properties: {
+                n1: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n2: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n3: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n4: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n5: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+              },
+              required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+            },
+          },
         }, }, t.removeFromTeam)
     
     fastify.put('/:userId', {
@@ -90,19 +224,55 @@ async function team(fastify: FastifyInstance) {
             },
             required: ['idcreature1', 'idespece1', 'idcreature2', 'idespece2']
           },
-        response: {
+          response: {
             201: {
-            description: 'List of creatures in the team',
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' }
-                }
-            }
-            }
-        }
+              description: 'List of creatures in the team',
+              type: 'object',
+              properties: {
+                n1: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n2: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n3: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n4: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+                n5: {
+                  type: 'object',
+                  properties: {
+                    idcreature: { type: 'string' },
+                    idespece: { type: 'string' },
+                  },
+                  required: ['idcreature', 'idespece'],
+                },
+              },
+              required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+            },
+          },
         }, }, t.replaceInTeam)
     
 }

@@ -7,7 +7,7 @@ export const getTeam = async (
     reply: FastifyReply) => {
       const { userId } = request.params;
       const userData = getUserData(userId);
-      return reply.status(201).send(userData["team"])
+      reply.status(200).send(userData["team"])
   }
 
 export const addToTeam = async (
@@ -64,7 +64,7 @@ export const addToTeam = async (
         // Sauvegarde les données mises à jour
         saveUserData(userId, userData);
 
-        return reply.status(201).send(team);
+        reply.status(201).send(team);
     } catch (error) {
         console.error(error);
         return reply.status(500).send({ error: "An error occurred while adding to the team" });
@@ -168,7 +168,7 @@ export const replaceInTeam = async (
         // Sauvegarde les données mises à jour
         saveUserData(userId, userData);
 
-        return reply.status(201).send(team);
+        reply.status(201).send(team);
     } catch (error) {
         console.error(error);
         return reply.status(500).send({ error: "An error occurred while replacing in the team" });
