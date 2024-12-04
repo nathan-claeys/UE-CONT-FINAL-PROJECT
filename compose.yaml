@@ -4,7 +4,7 @@ services:
     image: traefik:v3.2
     container_name: traefik-reverse-proxy
     # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
+    command: --api.insecure=true --providers.docker --providers.docker.exposedByDefault=false
     ports:
       # The HTTP port
       - "80:80"
@@ -13,6 +13,7 @@ services:
     labels:
       - traefik.docker.network=proxy
       - traefik.port=8080
+      - traefik.exposedbydefault=false
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
@@ -25,6 +26,7 @@ services:
     labels:
       - "traefik.http.routers.team.rule=Host(`team.localhost`)"
       - "traefik.port=3000"
+      - "traefik.enable=true"
     networks:
       - proxy
   club:
@@ -36,8 +38,9 @@ services:
       - /app/node_modules # Prevent overwriting `node_modules`
       - ./dist:/app/dist # Ensure the `dist` folder is mapped for TypeScript output
     labels:
-      - "traefik.http.routers.team.rule=Host(`club.localhost`)"
+      - "traefik.http.routers.club.rule=Host(`club.localhost`)"
       - "traefik.port=3000"
+      - "traefik.enable=true"
     depends_on:
       - club-db
     command: sh -c "npx tsc && node dist/app.js" # Compile TypeScript and run the app
@@ -50,8 +53,39 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
+    labels:
+      - "traefik.enable=false"
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - internal
+  store:
+    build:
+      context: ./store
+    container_name: store
+    environment:
+      NODE_ENV: production # Définir des variables d'environnement
+    labels:
+      - "traefik.http.routers.store.rule=Host(`store.localhost`)"
+      - "traefik.port=3000"
+      - "traefik.enable=true"
+    depends_on:
+      - store_db # S'assure que MySQL démarre avant l'application
+    networks:
+      - internal
+      - proxy
+  store_db:
+    image: mysql:8.0 # Utilise l'image MySQL officielle
+    container_name: store_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: store_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - internal
 
