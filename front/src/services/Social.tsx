@@ -1,19 +1,21 @@
 import axios from 'axios'
 
 export interface User {
+  id: number;
   name: string;
   email: string;
   age: number;
   badges: string[];
-  friends: string[];
+  friends: number[];
 }
 
 const mock_user: User = {
+  id: 1,
   name: 'Sacha du Bourg Palette',
   email: 'sacha@bourgpalette.jp',
   age: 12,
   badges: ['eau', 'feu', 'terre', 'air'],
-  friends: ['Ondine', 'Pierre'],
+  friends: [2, 3, 4, 5],
 }
 
 const mock_clubs = [
@@ -24,7 +26,7 @@ const mock_clubs = [
 
 const use_mock_data = true
 
-export function getUserProfile() : User {
+export function getUserProfile(): User {
   if (use_mock_data) {
     return mock_user
   }
@@ -37,7 +39,7 @@ export function getUserProfile() : User {
   return mock_user
 }
 
-export function getUserFriends() : string[] {
+export function getUserFriends(): number[] {
   if (use_mock_data) {
     return mock_user.friends
   }
@@ -48,7 +50,7 @@ export function getUserFriends() : string[] {
   }
   )
   return mock_user.friends
-  
+
 }
 
 export function getUserClubs(): { id: number, name: string, members: number }[] {

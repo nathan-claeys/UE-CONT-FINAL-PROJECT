@@ -11,6 +11,7 @@ import Register from './routes/Register';
 import Home from './routes/Home';
 import Messages from './routes/Messages';
 import Team from './routes/Team';
+import Match from './routes/Match';
 
 const { TabPane } = Tabs;
 
@@ -56,14 +57,6 @@ const AppTabs = () => {
     </div>
   );
 };
-
-// Page Matches
-const Matches = () => (
-  <div>
-    <h2>Matches</h2>
-    <p>Here you can find matches</p>
-  </div>
-);
 
 // Layout pour les routes protégées avec AppTabs
 const ProtectedLayout = ({ children }: { children: React.ReactNode }) => (
@@ -121,7 +114,7 @@ const App = () => {
             element={
               <ProtectedRoute component={() => (
                 <ProtectedLayout>
-                  <Matches />
+                  <Match />
                 </ProtectedLayout>
               )} />
             }
