@@ -18,11 +18,11 @@ async function team(fastify: FastifyInstance) {
     $id: 'Team',
     type: 'object',
     properties: {
-      n1: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
-      n2: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
-      n3: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
-      n4: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
-      n5: {type: 'object', properties: {data: {$ref: 'Creature#'}}},
+      n1: {$ref: 'Creature#'},
+      n2: {$ref: 'Creature#'},
+      n3: {$ref: 'Creature#'},
+      n4: {$ref: 'Creature#'},
+      n5: {$ref: 'Creature#'},
     },
     required: ['n1', 'n2', 'n3', 'n4', 'n5'],
   })
@@ -34,50 +34,7 @@ async function team(fastify: FastifyInstance) {
       response: {
         200: {
           description: 'List of creatures in the team',
-          type: 'object',
-          properties: {
-            n1: {
-              type: 'object',
-              properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' },
-              },
-              required: ['idcreature', 'idespece'],
-            },
-            n2: {
-              type: 'object',
-              properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' },
-              },
-              required: ['idcreature', 'idespece'],
-            },
-            n3: {
-              type: 'object',
-              properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' },
-              },
-              required: ['idcreature', 'idespece'],
-            },
-            n4: {
-              type: 'object',
-              properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' },
-              },
-              required: ['idcreature', 'idespece'],
-            },
-            n5: {
-              type: 'object',
-              properties: {
-                idcreature: { type: 'string' },
-                idespece: { type: 'string' },
-              },
-              required: ['idcreature', 'idespece'],
-            },
-          },
-          required: ['n1', 'n2', 'n3', 'n4', 'n5'],
+          $ref: 'Team#',
         },
       }
     }, }, t.getTeam)
