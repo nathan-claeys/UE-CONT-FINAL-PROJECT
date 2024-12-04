@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getUserData, saveUserData } from '../data/db'; // Supposons que vous avez ces fonctions dans votre db.ts
+import { UserTeam } from '../interfaces';
 
 // Renvoi la collection du joueur
 export const getCollection = async (
@@ -119,6 +120,15 @@ export const equipItemToCreature = async (
   // Equiper l'item à la créature
   creature.items = { ...item, equiped: true };
   item.equiped = true;
+
+  const teamSpot = Object.keys(userData.team).find(
+    (key) =>
+        userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+        userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+  );
+  if(teamSpot) {
+    userData.team[teamSpot as keyof UserTeam["team"]].items={ ...item, equiped: true };
+  }
 
   // Sauvegarder les modifications
   saveUserData(userId, userData);
