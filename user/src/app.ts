@@ -10,6 +10,7 @@ import fastifyJwt from "@fastify/jwt";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { config } from "./config";
+import cors from '@fastify/cors'
 
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
@@ -92,6 +93,9 @@ export async function buildApp(): Promise<FastifyInstance> {
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
     }
   }
+
+  // CORS
+  await app.register(cors, {})
 
   // JWT Plugin
   await app.register(fastifyJwt, {

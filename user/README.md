@@ -250,5 +250,5 @@ Common status codes:
 
 For issues or questions, contact:
 
-- Team Lead: [Messaoud]
-- Developer: [Messoaud - Kaies - Mouadh]
+- Team Lead: [ Messaoud HAMDI ]
+- Developers : [ Messaoud HAMDI - Mouadh Bondka - Kaies Mhadhbi ]
