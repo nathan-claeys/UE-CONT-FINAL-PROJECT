@@ -1,0 +1,66 @@
+services:
+  reverse-proxy:
+    # The official v3 Traefik docker image
+    image: traefik:v3.2
+    container_name: traefik-reverse-proxy
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    labels:
+      - traefik.docker.network=proxy
+      - traefik.port=8080
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy
+  team:
+    build:
+      context: ./team/team
+    container_name: team
+    labels:
+      - "traefik.http.routers.team.rule=Host(`team.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - proxy
+  club:
+    build:
+      
+      context: ./clubs
+    container_name: club
+    volumes:
+      - .:/app
+      - /app/node_modules # Prevent overwriting `node_modules`
+      - ./dist:/app/dist # Ensure the `dist` folder is mapped for TypeScript output
+    labels:
+      - "traefik.http.routers.team.rule=Host(`club.localhost`)"
+      - "traefik.port=3000"
+    depends_on:
+      - club-db
+    command: sh -c "npx tsc && node dist/app.js" # Compile TypeScript and run the app
+    networks:
+      - internal
+  club-db:
+    image: mysql:5.7
+    container_name: club-db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - internal
+
+
+networks:
+  proxy:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+  external:
+    driver: host
