@@ -2,7 +2,6 @@ import fastify from "fastify";
 import mysql from "mysql2";
 import cors from '@fastify/cors'
 
-
 const app = fastify({ logger: true });
 
 const db = mysql.createPool({
