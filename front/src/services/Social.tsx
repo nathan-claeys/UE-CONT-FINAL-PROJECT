@@ -104,7 +104,7 @@ export function getMyClub(): { id: number, name: string, members: number } | nul
   return null
 }
 
-export function leaveClub(): void {
+export function leaveClub(name:String): void {
   axios.post(`/user/clubs/leave`).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -112,9 +112,3 @@ export function leaveClub(): void {
   }
   )
 }
-
-export const createClub = async (name: string) => {
-  if (!name) throw new Error("Club name cannot be empty.");
-  console.log(`Created club: ${name}`);
-  return new Promise<void>((resolve) => setTimeout(resolve, 1000));
-};

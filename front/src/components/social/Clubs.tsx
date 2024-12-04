@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Input, message } from "antd";
-import { getMyClub, leaveClub, joinClub, createClub } from "../../services/Social";
+import { getMyClub, leaveClub, joinClub, createClub, getClubs } from "../../services/Social";
 
 interface Club {
   id: number;
@@ -8,15 +8,22 @@ interface Club {
   members: number;
 }
 
-interface ClubsProps {
-  clubs: Club[];
-}
-
-const Clubs: React.FC<ClubsProps> = ({ clubs }) => {
-  const [myClub, setMyClub] = useState<{ id: number; name: string; members: number } | null>(getMyClub());
+const Clubs: React.FC = () => {
+  const [myClub, setMyClub] = useState<{ id: number; name: string; members: number } | null>();
+  const [clubs, setClubs] = useState<Club[]>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newClubName, setNewClubName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchClubs = async () => {
+      const clubs = await getClubs(); // Appel à la fonction de service
+      setClubs(clubs);
+      const myClub = getMyClub(); // Appel à la fonction de service
+      setMyClub(myClub);
+    };
+    fetchClubs();
+  }, []);
 
   const handleAddClub = async () => {
     if (!newClubName.trim()) {
@@ -60,7 +67,7 @@ const Clubs: React.FC<ClubsProps> = ({ clubs }) => {
           </p>
           <Button
             onClick={() => {
-              leaveClub(); // Appel à la fonction de service
+              leaveClub(myClub.name); 
               setMyClub(null);
               message.success("You have left the club.");
             }}
@@ -77,7 +84,7 @@ const Clubs: React.FC<ClubsProps> = ({ clubs }) => {
       </Button>
 
       <h3>Available Clubs</h3>
-      {clubs
+      {clubs && clubs
         .filter((club) => !myClub || club.id !== myClub.id)
         .map((club) => (
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }} key={club.id}>
