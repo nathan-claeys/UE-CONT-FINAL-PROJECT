@@ -1,5 +1,6 @@
 import fastify from "fastify";
 import mysql from "mysql2";
+import cors from '@fastify/cors'
 
 const app = fastify({ logger: true });
 
@@ -259,6 +260,7 @@ app.get("/clubs/:id/creator", async (request, reply) => {
 // Start the Fastify app
 const start = async () => {
   try {
+    await app.register(cors, {});
     const address = await app.listen({ port: 3000, host: "0.0.0.0" });
     app.log.info(`Server listening on ${address}`);
   } catch (err) {
