@@ -66,6 +66,14 @@ export const deleteFromCollection = async (
     for (const creature of userData.collectionCreature) {
       if (creature.items?.iditem === iditem) {
         creature.items = undefined;
+        const teamSpot = Object.keys(userData.team).find(
+          (key) =>
+              userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+              userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+        );
+        if(teamSpot) {
+          userData.team[teamSpot as keyof UserTeam["team"]].items=undefined;
+        }
         break;
       }
     }
