@@ -1,55 +1,84 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest, FastifyReply } from 'fastify';
 import pool from '../db';
 import { handleDatabaseError } from '../utils';
+import { RowDataPacket, OkPacket } from 'mysql2';
 
 export const getMatches = async (req: FastifyRequest, res: FastifyReply) => {
     const { status, userId } = req.query as { status?: string; userId?: string };
 
-    let query = `SELECT * FROM matches`;
-    const params: any[] = [];
-
-    if (status || userId) {
-        query += " WHERE";
-        if (status) {
-            params.push(status);
-            query += ` status = $${params.length}`;
-        }
-        if (userId) {
-            if (params.length > 0) query += " AND";
-            params.push(userId);
-            query += ` (creator_id = $${params.length} OR opponent_id = $${params.length})`;
-        }
-    }
-
     try {
-        const { rows } = await pool.query(query, params);
+        const [rows] = await pool.query('CALL GetMatches(?, ?)', [status, userId]);
         res.send(rows);
     } catch (error) {
         handleDatabaseError(error);
-        res.status(500).send({ error: "Internal server error" });
+        res.status(500).send({ error: 'Internal server error' });
     }
 };
 
 export const createMatch = async (req: FastifyRequest, res: FastifyReply) => {
-    const { creatorId, opponentId, matchType } = req.body as { creatorId: string; opponentId: string; matchType: string };
-
-    const query = `
-        INSERT INTO matches (creator_id, opponent_id, status)
-        VALUES ($1, $2, 'created')
-            RETURNING id;
-    `;
+    const { creatorId, opponentId } = req.body as { creatorId: string; opponentId: string; matchType: string };
 
     try {
-        const { rows } = await pool.query(query, [creatorId, opponentId]);
-        res.status(201).send({ matchId: rows[0].id });
+        const [result]: any = await pool.query('CALL CreateMatch(?, ?)', [creatorId, opponentId]);
+        res.status(201).send({ matchId: result[0].matchId });
+    } catch (error) {
+        handleDatabaseError(error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+};
+
+export const getMatch = async (req: FastifyRequest, res: FastifyReply) => {
+    const { matchId } = req.params as { matchId: number };
+
+    const query = `CALL GetMatchDetails(?)`;
+
+    try {
+        const [rows] = await pool.query<RowDataPacket[]>(query, [matchId]);
+        if (rows.length > 0) {
+            res.send(rows);
+        } else {
+            res.status(404).send({ error: "Match not found" });
+        }
     } catch (error) {
         handleDatabaseError(error);
         res.status(500).send({ error: "Internal server error" });
     }
 };
 
-export const registerRoutes = (fastify: FastifyInstance) => {
-    fastify.get('/matches', getMatches);
-    fastify.post('/matches', createMatch);
-    // Add other routes here
+export const updateMatchStatus = async (req: FastifyRequest, res: FastifyReply) => {
+    const { matchId } = req.params as { matchId: number };
+    const { status } = req.body as { status: string };
+
+    const validStatuses = ["created", "in-progress", "finished", "canceled"];
+
+    if (!validStatuses.includes(status)) {
+        return res.status(400).send({ error: "Invalid status" });
+    }
+
+    const query = `CALL UpdateMatchStatus(?, ?)`;
+
+    try {
+        await pool.query(query, [matchId, status]);
+        res.send({ message: `Match status updated to ${status}` });
+    } catch (error) {
+        handleDatabaseError(error);
+        res.status(500).send({ error: "Internal server error" });
+    }
+};
+
+export const deleteMatch = async (req: FastifyRequest, res: FastifyReply) => {
+    const { matchId } = req.params as { matchId: number };
+
+    const query = `CALL DeleteMatch(?)`;
+
+    try {
+        const [result] = await pool.query<OkPacket>(query, [matchId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).send({ error: "Match not found or cannot be deleted" });
+        }
+        res.send({ message: "Match deleted successfully" });
+    } catch (error) {
+        handleDatabaseError(error);
+        res.status(500).send({ error: "Internal server error" });
+    }
 };

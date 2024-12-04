@@ -1,34 +1,39 @@
 {
-  "name": "clash-of-pokechakucha-matching",
+  "name": "matching",
   "version": "1.0.0",
-  "description": "Matching microservice for Clash of Pokéchakucha",
-  "main": "dist/index.js",
-  "scripts": {
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn src/index.ts",
-    "build": "tsc",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+  "description": "This project was bootstrapped with Fastify-CLI.",
+  "main": "app.ts",
+  "directories": {
+    "test": "matching/test"
   },
-  "keywords": ["fastify", "typescript", "postgresql", "microservices"],
-  "author": "Your Name",
-  "license": "MIT",
+  "scripts": {
+    "test": "npm run build:ts && tsc -p matching/test/tsconfig.json && c8 node --test -r ts-node/register \"test/**/*.ts\"",
+    "start": "npm run build:ts && fastify start -l info dist/app.js",
+    "build:ts": "tsc",
+    "watch:ts": "tsc -w",
+    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
+    "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "fastify": "^4.22.2",
-    "pg": "^8.11.1",
-    "fastify-cors": "^8.1.0",
-    "fastify-swagger": "^6.5.2",
-    "fastify-plugin": "^4.5.0"
+    "pg": "^8.13.1",
+    "fastify": "^5.0.0",
+    "fastify-plugin": "^5.0.0",
+    "@fastify/autoload": "^6.0.0",
+    "@fastify/sensible": "^6.0.0",
+    "@fastify/swagger": "^9.2.0",
+    "@fastify/swagger-ui": "^5.1.0",
+    "fastify-cli": "^7.0.1",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
-    "@types/node": "^20.8.2",
-    "@typescript-eslint/eslint-plugin": "^6.7.2",
-    "@typescript-eslint/parser": "^6.7.2",
-    "eslint": "^8.55.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.1.2",
-    "ts-node-dev": "^2.1.0",
-    "typescript": "^5.3.3"
+    "@types/node": "^22.1.0",
+    "c8": "^10.1.2",
+    "ts-node": "^10.4.0",
+    "concurrently": "^9.0.0",
+    "fastify-tsconfig": "^2.0.0",
+    "typescript": "^5.2.2"
   }
 }

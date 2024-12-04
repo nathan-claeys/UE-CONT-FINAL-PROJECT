@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=btata
+      - DB_NAME=matching_db
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: btata
+      MYSQL_DATABASE: matching_db
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./mysql/stored_procedures.sql:/docker-entrypoint-initdb.d/02-stored_procedures.sql
+
+volumes:
+  db_data:
