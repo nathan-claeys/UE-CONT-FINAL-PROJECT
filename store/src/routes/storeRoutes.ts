@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import * as storeController from '../controllers/storeController';
-import { PurchaseSchema, SellSchema } from '../schemas/storeSchemas';
+import { PurchaseSchema} from '../schemas/storeSchemas';
 import { Type } from '@sinclair/typebox';  
 
 const storeRoutes: FastifyPluginAsync = async (fastify) => {

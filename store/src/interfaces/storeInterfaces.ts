@@ -13,11 +13,6 @@ export enum PokemonType {
   GRASS = 'grass',
 }
 
-export interface GadgetPower {
-  target: GadgetTarget;
-  points: number;
-}
-
 export enum GadgetTarget {
   MY_ATTACK = 'MY_ATTACK',
   OPPONENT_ATTACK = 'OPPONENT_ATTACK',
@@ -29,7 +24,8 @@ export interface Gadget {
   id: string;
   name: string;
   cost: number;
-  power: GadgetPower;
+  target: GadgetTarget;
+  points: number;
 }
 
 export interface Transaction {
