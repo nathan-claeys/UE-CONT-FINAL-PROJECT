@@ -20,8 +20,8 @@ CREATE PROCEDURE CreateMatch(
     IN p_opponentId VARCHAR(255)
 )
 BEGIN
-    INSERT INTO matches (creator_id, opponent_id, status)
-    VALUES (p_creatorId, p_opponentId, 'created');
+    INSERT INTO matches (creator_id, opponent_id, status, rounds)
+    VALUES (p_creatorId, p_opponentId, 'created', '[]');
     SELECT LAST_INSERT_ID() AS matchId; -- Return the ID of the newly created match
 END $$
 

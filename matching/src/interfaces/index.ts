@@ -1,4 +1,4 @@
-import { MatchStatus, RoundResult, PokéchakuchonType } from "../enums";
+import {MatchStatus, RoundResult, PokéchakuchonType, GadgetTarget} from "../enums";
 
 export interface User {
   id: string;
@@ -9,17 +9,19 @@ export interface Match {
   id: string;
   creatorId: string;
   opponentId?: string;
+  rounds: Round[];
   status: MatchStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  winner?: string;
 }
 
 export interface Round {
   id: string;
   matchId: string;
   roundNumber: number;
-  player1Choice: string; //  Pokéchakuchon ID
-  player2Choice: string; // Pokéchakuchon ID
+  player1Pokéchakuchon: Pokéchakuchon;
+  player2Pokéchakuchon: Pokéchakuchon;
+  player1Gadget?: Gadget;
+  player2Gadget?: Gadget;
   winnerId?: string; // ID of the winning player (optional initially)
   result?: RoundResult; // Optional if not yet resolved
 }
@@ -38,16 +40,17 @@ export interface MatchStatistics {
 }
 
 export interface Pokéchakuchon {
-  id: string;
+  id: number;
   name: string;
   type: PokéchakuchonType;
-  level: number; // Level impacts stats
-  stats: PokéchakuchonStats;
+  power: number;
 }
 
-export interface PokéchakuchonStats {
-  attack: number;
-  defense: number;
-  speed: number;
-  hp: number;
+
+export interface Gadget {
+  id: number;
+  name: string;
+  target: GadgetTarget;
+  points: number;
 }
+

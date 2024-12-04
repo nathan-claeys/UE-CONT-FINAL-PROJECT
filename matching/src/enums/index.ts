@@ -12,8 +12,15 @@ export enum RoundResult {
 }
 
 export enum PokéchakuchonType {
+  NORMAL = "normal",
   FIRE = "fire",
   WATER = "water",
   GRASS = "grass",
-  ELECTRIC = "electric",
+}
+
+export enum GadgetTarget {
+  MY_ATTACK = "MY_ATTACK",
+  OPPONENT_ATTACK = "OPPONENT_ATTACK",
+  TYPE_IMPACT = "TYPE_IMPACT",
+  CREDIT = "CREDIT",
 }
