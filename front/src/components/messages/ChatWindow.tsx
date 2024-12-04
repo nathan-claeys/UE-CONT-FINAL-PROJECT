@@ -53,7 +53,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, conversation }) =
           placeholder="Write your message..."
         />
         <Button type="primary" onClick={handleSend} style={{ marginLeft: "10px" }}>
-          Envoyer
+          Send
         </Button>
       </div>
     </div>
