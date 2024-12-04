@@ -1,10 +1,14 @@
 export interface MessageSent {
-  receiver: number;
-  sender: number;
+  receiver: string;
+  sender: string;
   message: string;
 }
 
 export interface ShowMessages {
-  receiver: number;
-  sender: number;
+  receiver: string;
+  sender: string;
+}
+
+export interface DelMessage {
+  id_message: number;
 }
