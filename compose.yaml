@@ -9,10 +9,23 @@ services:
       - "80:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
+    labels:
+      - traefik.docker.network=proxy
+      - traefik.port=8080
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy
   team:
-    image: team
+    image: team:v1
     labels:
-      - "traefik.http.routers.team.rule=Host(`team.docker.localhost`)"
+      - "traefik.http.routers.team.rule=Host(`team.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - proxy
+
+
+networks:
+  proxy:
+    driver: bridge
