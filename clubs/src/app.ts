@@ -55,6 +55,35 @@ app.post("/clubs", async (request, reply) => {
   }
 });
 
+// GET endpoint to fetch clubs a user is a member of
+app.get("/clubs/user/:id", async (request, reply) => {
+  const { id } = request.params as { id: string }; 
+
+  try {
+    const [rows] = await db
+      .promise()
+      .query<mysql.RowDataPacket[]>(
+        `SELECT c.id, c.name 
+         FROM clubs c
+         JOIN club_members cm ON c.id = cm.club_id
+         WHERE cm.user_id = ?`,
+        [id]
+      );
+
+    if (rows.length === 0) {
+      return reply.status(404).send({ error: "No clubs found for this user" });
+    }
+
+    reply.send({
+      user_id: id,
+      clubs: rows,
+    });
+  } catch (error) {
+    console.error("Error fetching user's clubs:", error);
+    reply.status(500).send({ error: "Failed to fetch user's clubs" });
+  }
+});
+
 
 // GET endpoint to fetch clubs
 app.get("/clubs", async (request, reply) => {
