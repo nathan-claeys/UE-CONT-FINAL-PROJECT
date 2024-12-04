@@ -1,0 +1,9 @@
+services:
+  pokechakuchon:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/code              
+  db:
+    image: mysql
