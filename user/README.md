@@ -106,6 +106,7 @@ OpenAPI documentation is available at:
 ### Key Endpoints
 
 ```typescript
+// Authentication
 POST /users/register
 {
   "username": string,
@@ -119,9 +120,66 @@ POST /users/login
   "password": string
 }
 
+// User Profile
 GET /users/me
 Header: Authorization: Bearer <token>
+
+// Service Integration
+GET /users/verify
+Header: Authorization: Bearer <token>
+Response: {
+  userId: string,
+  isValid: boolean
+}
+
+GET /users/details/:userId
+Header: Authorization: Bearer <token>
+Response: {
+  id: string,
+  username: string,
+  credits: number,
+  level: number
+}
+
+// User Management
+GET /users
+Header: Authorization: Bearer <token>
+Query Parameters:
+  - page: number (default: 1)
+  - limit: number (default: 10, max: 100)
+  - username: string (optional)
+  - levelMin: number (optional)
+  - levelMax: number (optional)
+Response: {
+  users: Array<User>,
+  pagination: {
+    total: number,
+    page: number,
+    limit: number,
+    pages: number
+  }
+}
 ```
+
+Service Integration
+For Other Services
+
+Token Verification
+
+Use /users/verify to validate JWT tokens from clients
+Returns user ID and validity status
+
+User Information
+
+Use /users/details/:userId to get essential user data
+Returns username, credits, and level
+Required for Store/Team/Match services
+
+Bulk User Data
+
+Use /users with pagination for listing users
+Supports filtering by username and level range
+Useful for leaderboards and admin functions
 
 ## API Integration
 
@@ -192,5 +250,5 @@ Common status codes:
 
 For issues or questions, contact:
 
-- Team Lead: [Name]
-- Developer: [Name]
+- Team Lead: [Messaoud]
+- Developer: [Messoaud - Kaies - Mouadh]

@@ -28,6 +28,14 @@ interface LoginUserBody {
   password: string;
 }
 
+interface GetUsersQuerystring {
+  page?: number;
+  limit?: number;
+  username?: string;
+  levelMin?: number;
+  levelMax?: number;
+}
+
 export async function buildApp(): Promise<FastifyInstance> {
   const app = fastify({
     logger: {
@@ -244,6 +252,169 @@ export async function buildApp(): Promise<FastifyInstance> {
     async (request: AuthenticatedRequest, reply: FastifyReply) => {
       const user = await userService.getUserById(request.user.userId);
       reply.send(user);
+    }
+  );
+
+  app.get(
+    "/users/verify",
+    {
+      onRequest: [(app as any).authenticate],
+      schema: {
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              userId: { type: "string" },
+              isValid: { type: "boolean" },
+            },
+          },
+        },
+      },
+    },
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      reply.send({
+        userId: request.user.userId,
+        isValid: true,
+      });
+    }
+  );
+
+  app.get(
+    "/users/details/:userId",
+    {
+      onRequest: [(app as any).authenticate],
+      schema: {
+        params: {
+          type: "object",
+          required: ["userId"],
+          properties: {
+            userId: { type: "string" },
+          },
+        },
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              username: { type: "string" },
+              credits: { type: "number" },
+              level: { type: "number" },
+            },
+          },
+        },
+      },
+    },
+    async (
+      request: FastifyRequest<{
+        Params: { userId: string };
+      }>,
+      reply: FastifyReply
+    ) => {
+      const user = await userService.getUserById(request.params.userId);
+      reply.send({
+        id: user.id,
+        username: user.username,
+        credits: user.credits,
+        level: user.level,
+      });
+    }
+  );
+
+  app.get<{ Querystring: GetUsersQuerystring }>(
+    "/users",
+    {
+      onRequest: [(app as any).authenticate],
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            page: { type: "number", minimum: 1, default: 1 },
+            limit: { type: "number", minimum: 1, maximum: 100, default: 10 },
+            username: { type: "string", minLength: 1 },
+            levelMin: { type: "number", minimum: 1 },
+            levelMax: { type: "number", minimum: 1 },
+          },
+        },
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              users: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    id: { type: "string" },
+                    username: { type: "string" },
+                    email: { type: "string" },
+                    credits: { type: "number" },
+                    level: { type: "number" },
+                    experience: { type: "number" },
+                    createdAt: { type: "string" },
+                  },
+                },
+              },
+              pagination: {
+                type: "object",
+                properties: {
+                  total: { type: "number" },
+                  page: { type: "number" },
+                  limit: { type: "number" },
+                  pages: { type: "number" },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      const {
+        page = 1,
+        limit = 10,
+        username,
+        levelMin,
+        levelMax,
+      } = request.query;
+
+      const queryBuilder = userService
+        .createQueryBuilder()
+        .skip((page - 1) * limit)
+        .take(limit);
+
+      if (username) {
+        queryBuilder.andWhere("LOWER(username) LIKE LOWER(:username)", {
+          username: `%${username}%`,
+        });
+      }
+
+      if (levelMin) {
+        queryBuilder.andWhere("level >= :levelMin", { levelMin });
+      }
+
+      if (levelMax) {
+        queryBuilder.andWhere("level <= :levelMax", { levelMax });
+      }
+
+      const [users, total] = await queryBuilder.getManyAndCount();
+
+      reply.send({
+        users: users.map((user) => ({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          credits: user.credits,
+          level: user.level,
+          experience: user.experience,
+          createdAt: user.createdAt,
+        })),
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit),
+        },
+      });
     }
   );
 
