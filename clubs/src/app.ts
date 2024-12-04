@@ -5,7 +5,7 @@ import cors from '@fastify/cors'
 const app = fastify({ logger: true });
 
 const db = mysql.createPool({
-  host: "db",
+  host: "club-db",
   user: "root",
   password: "root",
   database: "test",
