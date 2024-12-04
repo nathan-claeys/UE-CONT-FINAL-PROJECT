@@ -27,28 +27,51 @@ services:
       - proxy
   club:
     build:
-      context: ./clubs
-    volumes:
-      - .:/app
-      - /app/node_modules # Prevent overwriting `node_modules`
-      - ./dist:/app/dist # Ensure the `dist` folder is mapped for TypeScript output
+      context: ./club
+    networks:
+      - internal
+  front:
+    build:
+      context: ./front
+    networks:
+      - external
+  matching:
+    build:
+      context: ./matching
     labels:
-      - "traefik.http.routers.team.rule=Host(`club.localhost`)"
+      - "traefik.http.routers.matching.rule=Host(`matching.localhost`)"
       - "traefik.port=3000"
-    depends_on:
-      - club-db
-    command: sh -c "npx tsc && node dist/app.js" # Compile TypeScript and run the app
     networks:
       - internal
-  club-db:
-    image: mysql:5.7
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - proxy
+  message:
+    build:
+      context: ./message
     networks:
       - internal
+  pokechakuchon:
+    build:
+      context: ./pokechakuchon
+    networks:
+      - internal
+  store:
+    build:
+      context: ./store
+    labels:
+      - "traefik.http.routers.store.rule=Host(`store.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+  user:
+    build:
+      context: ./user
+    labels:
+      - "traefik.http.routers.user.rule=Host(`user.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
 
 
 networks:
