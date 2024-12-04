@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - "3001:3001"
+      - "3001:3000"
     environment:
       - DB_HOST=db
       - DB_USER=root
@@ -12,6 +12,7 @@ services:
       - DB_NAME=matching_db
     depends_on:
       - db
+    command: sh -c "npm install && npm run build:ts && npm start" # Ensure the app waits for dependencies
 
   db:
     image: mysql:8.0
@@ -20,10 +21,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: btata
       MYSQL_DATABASE: matching_db
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./mysql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./mysql/stored_procedures.sql:/docker-entrypoint-initdb.d/02-stored_procedures.sql
 
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 volumes:
-  db_data:
+  db_data: # Volume definition for persisting data
+  
+   
+
+ 
