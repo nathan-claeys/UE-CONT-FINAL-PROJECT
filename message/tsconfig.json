@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                       // Set target to ES2020 for modern features
+    "module": "ESNext",                       // Use ESNext for import/export syntax
+    "moduleResolution": "node",               // Use Node.js module resolution
+    "esModuleInterop": true,                  // Allow default imports
+    "skipLibCheck": true,                     // Skips type-checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file name casing
+    "strict": true,                           // Enable strict mode
+    "outDir": "./dist",                       // Output directory for compiled files
+    "rootDir": "./src",                       // Root directory for source code
+    "resolveJsonModule": true,                // Allow importing JSON files
+    "types": ["node", "fastify"]              // Include types for Node and Fastify
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
