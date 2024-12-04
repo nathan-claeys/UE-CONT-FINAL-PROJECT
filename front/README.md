@@ -48,3 +48,9 @@ export default tseslint.config({
   },
 })
 ```
+## Contact
+
+For issues or questions, contact:
+
+- Team Lead: [ Nathan CLAEYS ]
+- Developers : [ Nathan CLAEYS - Jean Baptiste LAMBERTIN - Antoine CHEUCLE - Felipe LOBATO ]
