@@ -84,18 +84,6 @@ Retrieve global or user-specific match statistics.
 
 ---
 
-### **4. Match against AI**
-
-#### `POST /matches/ai`
-Create a match against an AI.
-- **Request Body**:
-  ```json
-  {
-    "userId": "12345",
-    "difficulty": "hard"
-  }
-  ```
-
 ---
 
 ## **Technical Notes**
