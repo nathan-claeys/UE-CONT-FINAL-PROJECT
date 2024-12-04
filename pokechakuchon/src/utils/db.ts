@@ -2,9 +2,9 @@ import mysql from 'mysql2';
 
 // Créer une connexion à la base de données
 export const connection = mysql.createConnection({
-  host: 'localhost',       
+  host: 'db',       
   user: 'root',            
-  password: '',            
+  password: 'toto',            
   database: 'creatures' 
 });
 

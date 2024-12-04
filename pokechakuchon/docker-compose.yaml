@@ -1,9 +1,25 @@
+version: '3.8'
+
 services:
   pokechakuchon:
     build: .
     ports:
-      - "5001:5000"
+      - "3000:3000"
     volumes:
-      - .:/code              
+      - .:/app/src
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      MYSQL_ROOT_PASSWORD: toto
+      DB_NAME: creatures
+    depends_on:
+      - db
+
   db:
     image: mysql
+    volumes:
+      - ./creatures_db/creatures.sql:/docker-entrypoint-initdb.d/creatures.sql
+    command: --init-file /docker-entrypoint-initdb.d/creatures.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: toto
+      MYSQL_DATABASE: creatures
