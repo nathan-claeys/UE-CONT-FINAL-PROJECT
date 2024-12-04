@@ -1,0 +1,37 @@
+# Node.js dependencies
+../node_modules/
+
+# TypeScript build output
+dist/
+
+# npm log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+../.env
+
+# TypeScript cache
+*.tsbuildinfo
+
+# VSCode settings (optional, if you're using VSCode)
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Linux system files
+*.swp
+
+# Logs
+*.log
+
+# Docker-related files (optional, if you're using Docker)
+docker-compose.override.yml
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Build artifacts
+build/
