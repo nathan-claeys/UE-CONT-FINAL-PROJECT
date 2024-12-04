@@ -1,4 +1,4 @@
-FROM node:22.1
+FROM node:23-alpine
 WORKDIR /app
 COPY . .
 RUN npm install -g fastify-cli
