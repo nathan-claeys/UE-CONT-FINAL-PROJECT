@@ -1,0 +1,34 @@
+{
+  "hash": "2e90c34a",
+  "configHash": "58527654",
+  "lockfileHash": "de996106",
+  "browserHash": "bf5be97e",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "a03e1218",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "becc3726",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "219b7786",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-PH7YVPII": {
+      "file": "chunk-PH7YVPII.js"
+    },
+    "chunk-ODPORMEJ": {
+      "file": "chunk-ODPORMEJ.js"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "message",
+  "version": "1.0.0",
+  "description": "The Message Microservice is responsible for handling all messaging-related operations within the application. It provides endpoints for sending, receiving, and managing messages between users.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "dev": "ts-node app.ts"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.10.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.1.0",
+    "fastify-plugin": "^5.0.1",
+    "mysql2": "^3.11.5",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "typescript": "^5.7.2"
+  }
+}
