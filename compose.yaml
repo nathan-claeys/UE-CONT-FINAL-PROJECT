@@ -29,7 +29,6 @@ services:
       - proxy
   club:
     build:
-      
       context: ./clubs
     container_name: club
     volumes:
@@ -44,6 +43,7 @@ services:
     command: sh -c "npx tsc && node dist/app.js" # Compile TypeScript and run the app
     networks:
       - internal
+      - proxy
   club-db:
     image: mysql:5.7
     container_name: club-db
@@ -61,6 +61,5 @@ networks:
     driver: bridge
   internal:
     driver: bridge
-    internal: true
   external:
     driver: host
