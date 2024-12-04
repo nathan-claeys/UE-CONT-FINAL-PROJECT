@@ -3,7 +3,7 @@ import * as mysql from 'mysql2/promise';
 
 
 export const pool = mysql.createPool({
-  host: 'mysql_store_service',  // Correspond au nom du service MySQL dans Docker Compose
+  host: 'store_db',  // Correspond au nom du service MySQL dans Docker Compose
   user: 'root',
   password: 'rootpassword',
   database: 'store_service',
