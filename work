@@ -1,0 +1,29 @@
+  front:
+    image: front
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`front.docker.localhost`)"
+
+  user:
+    image: user
+    labels:
+      - "traefik.http.routers.user.rule=Host(`user.docker.localhost`)"
+  club:
+    image: club
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`club.docker.localhost`)"
+  matching:
+    image: matching
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`matching.docker.localhost`)"
+  message:
+    image: message
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`message.docker.localhost`)"
+  pokechakuchon:
+    image: pokechakuchon
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`pokechakuchon.docker.localhost`)"
+  store:
+    image: store
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`store.docker.localhost`)"
