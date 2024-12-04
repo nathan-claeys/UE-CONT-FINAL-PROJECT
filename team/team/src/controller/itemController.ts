@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getUserData, saveUserData } from '../data/db'; // Supposons que vous avez ces fonctions dans votre db.ts
+import { UserTeam } from '../interfaces';
 
 // Renvoi la collection du joueur
 export const getCollection = async (
@@ -65,6 +66,14 @@ export const deleteFromCollection = async (
     for (const creature of userData.collectionCreature) {
       if (creature.items?.iditem === iditem) {
         creature.items = undefined;
+        const teamSpot = Object.keys(userData.team).find(
+          (key) =>
+              userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+              userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+        );
+        if(teamSpot) {
+          userData.team[teamSpot as keyof UserTeam["team"]].items=undefined;
+        }
         break;
       }
     }
@@ -120,6 +129,15 @@ export const equipItemToCreature = async (
   creature.items = { ...item, equiped: true };
   item.equiped = true;
 
+  const teamSpot = Object.keys(userData.team).find(
+    (key) =>
+        userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+        userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+  );
+  if(teamSpot) {
+    userData.team[teamSpot as keyof UserTeam["team"]].items={ ...item, equiped: true };
+  }
+
   // Sauvegarder les modifications
   saveUserData(userId, userData);
   return reply.status(200).send({ creature, item });
@@ -152,10 +170,21 @@ export const unequipItemFromCreature = async (
   }
 
   // Déséquiper la créature
-  const itemToUnequip = creature.items;
   creature.items = undefined;
-  userData.collectionItem.push({ iditem: itemToUnequip.iditem, equiped: false });
+  const item = userData.collectionItem.find(i => i.iditem === iditem);
+  if (item) {
+    item.equiped = false;
+  }
 
+  const teamSpot = Object.keys(userData.team).find(
+    (key) =>
+        userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+        userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+  );
+  if(teamSpot) {
+    userData.team[teamSpot as keyof UserTeam["team"]].items=undefined;
+  }
+  
   // Sauvegarder les modifications
   saveUserData(userId, userData);
 
