@@ -1,13 +1,14 @@
 import { Pokemon, PokemonType, GadgetTarget, Gadget, Transaction } from '../interfaces/storeInterfaces';
 import * as mysql from 'mysql2/promise';
 
-// Create a database connection pool
+
 export const pool = mysql.createPool({
-  host: 'host.docker.internal',
+  host: 'mysql_store_service',  // Correspond au nom du service MySQL dans Docker Compose
   user: 'root',
-  password: '',
+  password: 'rootpassword',
   database: 'store_service',
 });
+
 
 // Function to get inventory (Pokemon + Gadget)
 export const getInventory = async (): Promise<(Pokemon | Gadget)[]> => {
@@ -17,6 +18,7 @@ export const getInventory = async (): Promise<(Pokemon | Gadget)[]> => {
     const [pokemonRows] = await connection.query(
       'SELECT id, name, cost, type, power FROM pokemon'
     );
+    console.log(["pokemone",pokemonRows])
     const pokemonInventory: Pokemon[] = (pokemonRows as any[]).map((row) => ({
       id: row.id,
       name: row.name,
