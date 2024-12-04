@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import mysql from "mysql2";
 import cors from '@fastify/cors'
+import { FastifyReply, FastifyRequest } from "fastify";
 
 const app = fastify({ logger: true });
 
@@ -12,6 +13,39 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+});
+
+// Middleware: Token Validation
+app.addHook("preHandler", async (request: FastifyRequest, reply: FastifyReply) => {
+  const { authorization } = request.headers;
+
+  if (!authorization || !authorization.startsWith("Bearer ")) {
+    return reply.status(401).send({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const token = authorization.split(" ")[1];
+
+  try {
+    const response = await app.inject({
+      method: "GET",
+      url: "/users/verify", 
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.statusCode !== 200) {
+      return reply.status(401).send({ error: "Unauthorized: Invalid token" });
+    }
+
+    const responseBody = response.json();
+
+    if (!responseBody.valid) {
+      return reply.status(401).send({ error: "Unauthorized: Invalid token" });
+    }
+
+  } catch (error) {
+    app.log.error("Token verification failed:", (error as Error).message);
+    return reply.status(401).send({ error: "Unauthorized: Failed to verify token" });
+  }
 });
 
 // POST endpoint to add a new club
