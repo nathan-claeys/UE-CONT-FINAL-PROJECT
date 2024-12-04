@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Tabs, Button, Flex } from 'antd';
 import type { TabsProps } from 'antd';
-import { getUserProfile, getUserFriends, getUserClubs, User, getMyClub, leaveClub } from '../services/Social';
+import { getUserProfile, getUserFriends, User, getMyClub, leaveClub } from '../services/Social';
 
 import { joinClub } from '../services/Social';
 
@@ -53,10 +53,15 @@ const Friends: React.FC<FriendsProps> = ({ friends }) => (
   </div>
 )
 
-const Clubs: React.FC<ClubsProps> = ({ clubs }) => {
+const Clubs: React.FC = () => {
 
+  const [clubs, setClubs] = React.useState<{ id: number, name: string, members: number }[]>([]);
   const [myClub, setMyClub] = React.useState<{ id: number, name: string, members: number } | null>(getMyClub());
   
+  useEffect(() => {
+    getUserClubs().then((clubs) => setClubs(clubs));
+  }, []);
+
   return (
   <div>
     <h2>Clubs</h2>
@@ -93,7 +98,7 @@ const items: TabsProps['items'] = [
   {
     key: '3',
     label: 'Clubs',
-    children: <Clubs clubs = {getUserClubs()}/>,
+    children: <Clubs/>,
   },
 ];
 

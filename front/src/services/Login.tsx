@@ -17,6 +17,7 @@ async function login(email: string, password: string): Promise<boolean> {
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', response.data.user);
       return true;
     } else {
       throw new Error('Erreur inconnue lors de la connexion.');
