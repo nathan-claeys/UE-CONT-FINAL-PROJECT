@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import {
     getMatches,
-    createMatch, getMatch, updateMatchStatus, deleteMatch,
+    createMatch, getMatch, updateMatchStatus, deleteMatch, getRoundsForMatch, addRoundToMatch, getRoundById,
 } from '../../controllers/MatchesController';
 
 export const registerRoutes = (fastify: FastifyInstance) => {

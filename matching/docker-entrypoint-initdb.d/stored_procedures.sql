@@ -49,6 +49,38 @@ BEGIN
     DELETE FROM matches WHERE id = p_matchId AND status = 'canceled';
 END $$
 
+CREATE PROCEDURE GetRoundsForMatch(
+    IN p_matchId INT
+)
+BEGIN
+    SELECT * FROM rounds
+    WHERE match_id = p_matchId
+    ORDER BY round_number;
+END $$
+
+CREATE PROCEDURE AddRoundToMatch(
+    IN p_matchId INT,
+    IN p_roundNumber INT,
+    IN p_player1Pokéchakuchon INT,
+    IN p_player2Pokéchakuchon INT,
+    IN p_player1Gadget INT,
+    IN p_player2Gadget INT
+)
+BEGIN
+    INSERT INTO rounds (match_id, round_number, player1_pokéchakuchon_id, player2_pokéchakuchon_id, player1_gadget_id, player2_gadget_id)
+    VALUES (p_matchId, p_roundNumber, p_player1Pokéchakuchon, p_player2Pokéchakuchon, p_player1Gadget, p_player2Gadget);
+    SELECT * FROM rounds WHERE id = LAST_INSERT_ID();
+END $$
+
+CREATE PROCEDURE GetRoundById(
+    IN p_matchId INT,
+    IN p_roundId INT
+)
+BEGIN
+    SELECT * FROM rounds
+    WHERE match_id = p_matchId AND id = p_roundId;
+END $$
+
 -- Reset delimiter back to default ;
 DELIMITER ;
 
