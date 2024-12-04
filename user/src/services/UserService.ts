@@ -95,4 +95,8 @@ export class UserService {
 
     return await this.userRepository.save(user);
   }
+
+  createQueryBuilder() {
+    return this.userRepository.createQueryBuilder("user");
+  }
 }
