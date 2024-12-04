@@ -2,6 +2,7 @@ services:
   reverse-proxy:
     # The official v3 Traefik docker image
     image: traefik:v3.2
+    container_name: traefik-reverse-proxy
     # Enables the web UI and tells Traefik to listen to docker
     command: --api.insecure=true --providers.docker
     ports:
@@ -20,6 +21,7 @@ services:
   team:
     build:
       context: ./team/team
+    container_name: team
     labels:
       - "traefik.http.routers.team.rule=Host(`team.localhost`)"
       - "traefik.port=3000"
@@ -27,7 +29,9 @@ services:
       - proxy
   club:
     build:
+      
       context: ./clubs
+    container_name: club
     volumes:
       - .:/app
       - /app/node_modules # Prevent overwriting `node_modules`
@@ -42,6 +46,7 @@ services:
       - internal
   club-db:
     image: mysql:5.7
+    container_name: club-db
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
