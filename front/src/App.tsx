@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, Button } from 'antd';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './helpers/AuthContext';
 import ProtectedRoute from './components/PrivateRoute';
 import Welcome from './routes/Welcome';
@@ -10,6 +10,7 @@ import Login from './routes/Login';
 import Register from './routes/Register';
 import Home from './routes/Home';
 import Messages from './routes/Messages';
+import Team from './routes/Team';
 
 const { TabPane } = Tabs;
 
@@ -42,6 +43,7 @@ const AppTabs = () => {
       >
         <TabPane tab="News" key="/home" />
         <TabPane tab="Social" key="/social" />
+        <TabPane tab="Team" key="/team" />
         <TabPane tab="Matches" key="/matches" />
         <TabPane tab="Store" key="/store" />
         <TabPane tab="Messages" key="/messages" />
@@ -100,6 +102,16 @@ const App = () => {
               <ProtectedRoute component={() => (
                 <ProtectedLayout>
                   <Social />
+                </ProtectedLayout>
+              )} />
+            }
+          />
+          <Route
+            path="/team/*"
+            element={
+              <ProtectedRoute component={() => (
+                <ProtectedLayout>
+                  <Team />
                 </ProtectedLayout>
               )} />
             }
