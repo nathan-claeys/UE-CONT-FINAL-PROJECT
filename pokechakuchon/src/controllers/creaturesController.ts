@@ -18,6 +18,27 @@ export const getAllPokemon = async (req: FastifyRequest, reply: FastifyReply) =>
   return reply;
 };
 
+// Get pokemon by id
+export const getPokemonById = async (req: FastifyRequest, reply: FastifyReply) => {
+    const { id } = req.params as { id: number };
+
+    if (!id) {
+        return reply.status(400).send({ error: 'Pokemon id is required' });
+    }
+
+    
+    const [results] = await connection.promise().query(
+        'SELECT * FROM pokemon WHERE id = ?',
+        [id]
+    );
+
+    if (Array.isArray(results) && results.length > 0) {
+        return reply.status(200).send(results[0]);
+    } else {
+        return reply.status(404).send({ error: `Pokemon with id "${id}" not found` });
+    }
+};
+
 // Get pokemon by name
 export const getPokemonByName = async (req: FastifyRequest, reply: FastifyReply) => {
     const { name } = req.params as { name: string };
@@ -63,7 +84,7 @@ return reply.status(201).send({ message: `Pokemon ${name} successfully added` })
 
 // update an existing pokemon
 export const updatePokemon = async (req: FastifyRequest, reply: FastifyReply) => {
-    const { id } = req.params as { id: string };
+    const { id } = req.params as { id: number };
     const { name, type, power }: Partial<Pokemon> = req.body as Pokemon;
 
     if (!name || !type || !power) {
@@ -85,7 +106,7 @@ export const updatePokemon = async (req: FastifyRequest, reply: FastifyReply) =>
 
 // delete a pokemon
 export const deletePokemon = async (req: FastifyRequest, reply: FastifyReply) => {
-    const { id } = req.params as { id: string };
+    const { id } = req.params as { id: number };
 
     const [result]: any = await connection.promise().query(
         'DELETE FROM pokemon WHERE id = ?',
