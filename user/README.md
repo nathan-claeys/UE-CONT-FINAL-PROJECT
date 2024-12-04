@@ -1,112 +1,36 @@
 # User Service - Clash Of Pokéchakucha
 
-Authentication and user management microservice for the Pokéchakucha game platform.
-
-## Features
-
-- User authentication & registration
-- JWT-based session management
-- Credit system management
-- Experience/leveling system
-- Profile management
-- OpenAPI documentation
-
-## Tech Stack
-
-- Node.js >=16
-- TypeScript
-- Fastify framework
-- PostgreSQL 15
-- TypeORM
-- Docker
+User authentication and management service for the Pokéchakucha game platform.
 
 ## Quick Start
 
 ```bash
-# Clone and enter directory
-git clone <repository-url>
-cd user
+# Start with Docker
+docker-compose up -d
 
-# Install dependencies
+# Start development
 npm install
-
-# Start database
-docker-compose up -d postgres
-
-# Start development server
 npm run dev
 ```
 
-## Environment Setup
+## Environment Variables
 
-1. Copy example environment file:
-
-```bash
-cp .env.example .env
-```
-
-2. Configure environment variables:
+Copy `.env.example` to `.env`:
 
 ```env
 PORT=3000
-NODE_ENV=development
-
-# Database
 DB_HOST=localhost
-DB_PORT=5432
 DB_USER=pokechakucha
 DB_PASSWORD=pokechakucha123
 DB_NAME=pokechakucha_users
-
-# JWT
 JWT_SECRET=your-secret-key
-JWT_EXPIRES_IN=24h
-
-# Logging
-LOG_LEVEL=info
 ```
 
-## Development
+## API Endpoints
 
-### Available Scripts
+### Authentication
 
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build production version
-- `npm start` - Start production server
-- `npm test` - Run tests
-
-### Database
-
-The service uses PostgreSQL. Docker Compose configuration is provided:
-
-```bash
-# Start database
-docker-compose up -d postgres
-
-# Stop database
-docker-compose down
-
-# View logs
-docker-compose logs postgres
-```
-
-Database credentials:
-
-- User: pokechakucha
-- Password: pokechakucha123
-- Database: pokechakucha_users
-
-## API Documentation
-
-OpenAPI documentation is available at:
-
-- Interactive UI: `http://localhost:3000/docs`
-- OpenAPI spec: `http://localhost:3000/docs/json`
-
-### Key Endpoints
-
-```typescript
-// Authentication
+```http
 POST /users/register
 {
   "username": string,
@@ -119,136 +43,57 @@ POST /users/login
   "email": string,
   "password": string
 }
+```
 
-// User Profile
+### User Operations
+
+```http
 GET /users/me
-Header: Authorization: Bearer <token>
+Authorization: Bearer <token>
 
-// Service Integration
+GET /users
+Authorization: Bearer <token>
+?page=1&limit=10&username=test
+```
+
+### Service Integration
+
+```http
 GET /users/verify
-Header: Authorization: Bearer <token>
-Response: {
-  userId: string,
-  isValid: boolean
-}
+Authorization: Bearer <token>
 
 GET /users/details/:userId
-Header: Authorization: Bearer <token>
-Response: {
-  id: string,
-  username: string,
-  credits: number,
-  level: number
-}
-
-// User Management
-GET /users
-Header: Authorization: Bearer <token>
-Query Parameters:
-  - page: number (default: 1)
-  - limit: number (default: 10, max: 100)
-  - username: string (optional)
-  - levelMin: number (optional)
-  - levelMax: number (optional)
-Response: {
-  users: Array<User>,
-  pagination: {
-    total: number,
-    page: number,
-    limit: number,
-    pages: number
-  }
-}
+Authorization: Bearer <token>
 ```
 
-Service Integration
-For Other Services
-
-Token Verification
-
-Use /users/verify to validate JWT tokens from clients
-Returns user ID and validity status
-
-User Information
-
-Use /users/details/:userId to get essential user data
-Returns username, credits, and level
-Required for Store/Team/Match services
-
-Bulk User Data
-
-Use /users with pagination for listing users
-Supports filtering by username and level range
-Useful for leaderboards and admin functions
-
-## API Integration
-
-To integrate with this service:
-
-1. Register a user
-2. Login to get JWT token
-3. Use token in Authorization header for protected endpoints
-4. Route all user-related operations through this service
-
-Example request:
-
-```typescript
-const response = await fetch("http://localhost:3000/users/login", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    email: "user@example.com",
-    password: "password123",
-  }),
-});
-
-const { token, user } = await response.json();
-```
-
-## Architecture
-
-The service follows a layered architecture:
-
-- Routes (app.ts)
-- Services (UserService.ts)
-- Models (User.ts)
-- Database (TypeORM)
-
-Authentication flow uses JWT tokens that must be included in requests to protected endpoints of other services.
-
-## Error Handling
-
-Standard error responses:
-
-```json
-{
-  "error": "ErrorType",
-  "message": "Error description",
-  "statusCode": 400
-}
-```
-
-Common status codes:
+## Error Codes
 
 - 400: Bad Request
 - 401: Unauthorized
 - 404: Not Found
 - 409: Conflict
-- 500: Internal Server Error
+- 500: Server Error
 
-## Contributing
+## Documentation
 
-1. Branch naming: `feature/*`, `fix/*`, `refactor/*`
-2. Follow existing code style
-3. Add tests for new features
-4. Update documentation
-5. Submit PR with descriptive title and description
+- API Docs: `http://localhost:3000/docs`
+- OpenAPI: `http://localhost:3000/docs/json`
 
-## Contact
+## Tech Stack
 
-For issues or questions, contact:
+- Node.js & TypeScript
+- Fastify
+- PostgreSQL
+- TypeORM
+- Docker
 
-- Team Lead: [ Messaoud HAMDI ]
-- Developers : [ Messaoud HAMDI - Mouadh Bondka - Kaies Mhadhbi ]
+## Scripts
+
+- `npm run dev`: Development
+- `npm run build`: Production build
+- `npm start`: Production start
+
+## Team
+
+- Lead: Messaoud HAMDI
+- Developers: Messaoud HAMDI, Mouadh Bondka, Kaies Mhadhbi
