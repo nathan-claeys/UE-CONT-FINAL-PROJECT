@@ -154,8 +154,11 @@ export const unequipItemFromCreature = async (
   // Déséquiper la créature
   const itemToUnequip = creature.items;
   creature.items = undefined;
-  userData.collectionItem.push({ iditem: itemToUnequip.iditem, equiped: false });
-
+  const item = userData.collectionItem.find(i => i.iditem === iditem);
+  if (item) {
+    item.equiped = false;
+  }
+  
   // Sauvegarder les modifications
   saveUserData(userId, userData);
 
