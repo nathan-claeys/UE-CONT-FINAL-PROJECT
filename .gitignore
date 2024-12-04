@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .idea
+./matching/node_modules
+./matching/package-lock.json
+./matching/.env
