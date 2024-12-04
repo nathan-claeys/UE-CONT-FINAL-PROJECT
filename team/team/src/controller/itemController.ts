@@ -162,11 +162,19 @@ export const unequipItemFromCreature = async (
   }
 
   // Déséquiper la créature
-  const itemToUnequip = creature.items;
   creature.items = undefined;
   const item = userData.collectionItem.find(i => i.iditem === iditem);
   if (item) {
     item.equiped = false;
+  }
+
+  const teamSpot = Object.keys(userData.team).find(
+    (key) =>
+        userData.team[key as keyof UserTeam["team"]].idcreature === creature.idcreature &&
+        userData.team[key as keyof UserTeam["team"]].idespece === creature.idespece
+  );
+  if(teamSpot) {
+    userData.team[teamSpot as keyof UserTeam["team"]].items=undefined;
   }
   
   // Sauvegarder les modifications
