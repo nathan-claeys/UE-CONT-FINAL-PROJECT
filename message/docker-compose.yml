@@ -15,5 +15,24 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  fastify-service:
+    build:
+      context: ./api_en
+      dockerfile: Dockerfile
+    container_name: fastify_container
+    ports:
+      - "3000:3000" # Expose Fastify on port 3000
+    volumes:
+      - .:/api_en # Mount the current directory to /app
+      - .:/node_modules # Mount the node_modules directory to node_modules
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: user_password
+      DB_DATABASE: my_database
+    depends_on:
+      - db # Ensures that the Fastify service waits for the database to be ready before starting
+
 volumes:
   db_data:
