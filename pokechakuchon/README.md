@@ -23,15 +23,13 @@ Update existing Gadget details.
 Delete Gadget from the database.
 
 ## **Launch Microservice**
-
-### Accessing the Database:
-
-Open phpMyAdmin through http://localhost/phpmyadmin.
-Verify that the database containing the pokemon table exists and is properly set up.
-
 ### Starting the Microservice:
 
 Open a terminal in the project directory.
 Start the server by running: npm run start
 The microservice will be accessible at http://localhost:3000.
+
+### Or using Docker compose:
+with the command: docker-compose up --build
+
 
