@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `gadgets`
 --
 
-CREATE TABLE `gadgets` (
+CREATE TABLE `gadget` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `target` enum('MY_ATTACK','OPPONENT_ATTACK','TYPE_IMPACT','CREDIT') NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `gadgets` (
 -- Déchargement des données de la table `gadgets`
 --
 
-INSERT INTO `gadgets` (`id`, `name`, `target`, `points`) VALUES
+INSERT INTO `gadget` (`id`, `name`, `target`, `points`) VALUES
 (2, 'Power Booster', 'MY_ATTACK', 50),
 (3, 'Shield Enhancer', 'OPPONENT_ATTACK', -30),
 (4, 'Type Changer', 'TYPE_IMPACT', 20),
@@ -87,7 +87,7 @@ INSERT INTO `pokemon` (`id`, `name`, `type`, `power`) VALUES
 --
 -- Index pour la table `gadgets`
 --
-ALTER TABLE `gadgets`
+ALTER TABLE `gadget`
   ADD UNIQUE KEY `id` (`id`);
 
 --
@@ -103,7 +103,7 @@ ALTER TABLE `pokemon`
 --
 -- AUTO_INCREMENT pour la table `gadgets`
 --
-ALTER TABLE `gadgets`
+ALTER TABLE `gadget`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
