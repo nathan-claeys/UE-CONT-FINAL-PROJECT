@@ -1,20 +1,8 @@
-# Étape 1 : Utiliser l'image de base Node.js
-FROM node:22
-
-# Étape 2 : Définir le répertoire de travail
-WORKDIR /usr/src/app
-
-# Étape 3 : Copier package.json et package-lock.json (si présents) dans le conteneur
+# syntax=docker/dockerfile:1
+FROM node:23.1
+WORKDIR /app
 COPY package*.json ./
-
-# Étape 4 : Installer les dépendances
-RUN npm install
-
-# Étape 5 : Copier tout le reste du code dans le conteneur
 COPY . .
-
-# Étape 6 : Exposer le port de l'application
-EXPOSE 3001
-
-# Commande pour démarrer l'application
-CMD ["npm", "start"]
+RUN npm install
+CMD ["npm","run","dev"]
+EXPOSE 8080
