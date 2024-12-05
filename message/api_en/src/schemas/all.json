@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "MessageSent": {
+      "type": "object",
+      "properties": {
+        "receiver": {
+          "type": "number"
+        },
+        "sender": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "receiver",
+        "sender",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "ShowMessages": {
+      "type": "object",
+      "properties": {
+        "receiver": {
+          "type": "number"
+        },
+        "sender": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "receiver",
+        "sender"
+      ],
+      "additionalProperties": false
+    },
+    "DelMessage": {
+      "type": "object",
+      "properties": {
+        "id_message": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id_message"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
