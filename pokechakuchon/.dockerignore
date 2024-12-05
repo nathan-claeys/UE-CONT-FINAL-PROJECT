@@ -1,0 +1,13 @@
+
+.git
+.svn
+.DS_Store
+
+
+.env
+.vscode
+config.local.js
+
+build/
+dist/
+node_modules/
