@@ -53,10 +53,10 @@ The Message Microservice is responsible for handling all messaging-related opera
     "messages": [
       {
         "id":1,
-        "receiver_id":"@ewwweee09072002",
-        "sender_id":"@medhi1021235",
+        "receiver":"@ewwweee09072002",
+        "sender":"@mehdi1021235",
         "content":"Hello world",
-        "date":"YYYY-MM-DDTHH:MM:SS.sssZ",
+        "date":"YYYY-MM-DDTHH:MM:SS.sssZ"
       },
       ...
     ]
