@@ -1,0 +1,13 @@
+# traefik.toml
+debug = true
+logLevel = "DEBUG"
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "localhost"
+watch = true
+exposedbydefault = false

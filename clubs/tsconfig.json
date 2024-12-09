@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "outDir": "./dist", // This will direct compiled JS files to the 'dist' folder
+    "rootDir": "./src", // The 'src' directory will contain all TypeScript files
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

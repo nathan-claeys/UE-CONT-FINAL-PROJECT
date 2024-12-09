@@ -1,0 +1,84 @@
+services:
+  reverse-proxy:
+    # The official v3 Traefik docker image
+    image: traefik:v3.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    labels:
+      - traefik.docker.network=proxy
+      - traefik.port=8080
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy
+  team:
+    build:
+      context: ./team/team
+    labels:
+      - "traefik.http.routers.team.rule=Host(`team.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - proxy
+  club:
+    build:
+      context: ./club
+    networks:
+      - internal
+  front:
+    build:
+      context: ./front
+    networks:
+      - external
+  matching:
+    build:
+      context: ./matching
+    labels:
+      - "traefik.http.routers.matching.rule=Host(`matching.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+  message:
+    build:
+      context: ./message
+    networks:
+      - internal
+  pokechakuchon:
+    build:
+      context: ./pokechakuchon
+    networks:
+      - internal
+  store:
+    build:
+      context: ./store
+    labels:
+      - "traefik.http.routers.store.rule=Host(`store.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+  user:
+    build:
+      context: ./user
+    labels:
+      - "traefik.http.routers.user.rule=Host(`user.localhost`)"
+      - "traefik.port=3000"
+    networks:
+      - internal
+      - proxy
+
+
+networks:
+  proxy:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+  external:
+    driver: host
