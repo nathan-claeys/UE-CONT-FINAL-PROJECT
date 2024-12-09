@@ -2,8 +2,9 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import pool from '../db';
 import { handleDatabaseError } from '../utils';
 import { RowDataPacket, OkPacket } from 'mysql2';
-import { Round } from "../interfaces";
+import {Pokéchakuchon, Round} from "../interfaces";
 import { MatchStatus } from "../enums";
+import {determineRoundWinner} from "../matchingBL/matchingBl";
 
 export const getMatches = async (req: FastifyRequest, res: FastifyReply) => {
     const { status, userId } = req.query as { status?: string; userId?: string };
@@ -186,3 +187,39 @@ export const getRoundById = async (
         res.status(500).send({ error: "Internal server error", details: error });
     }
 };
+
+export const setRoundWinner = async (
+    req: FastifyRequest<{ Params: { matchId: string; roundId: string } }>,
+    res: FastifyReply
+) => {
+    const { matchId, roundId } = req.params;
+
+    try {
+        const [roundRows] = await pool.query<RowDataPacket[]>('CALL GetRoundById(?, ?)', [matchId, roundId]);
+
+        if (roundRows.length === 0) {
+            return res.status(404).send({ error: "Round not found for this match" });
+        }
+
+        const round: Round = roundRows[0] as Round;
+
+        const player1Pokéchakuchon: Pokéchakuchon = await getPokéchakuchonById(round.player1Pokéchakuchon);
+        const player2Pokéchakuchon: Pokéchakuchon = await getPokéchakuchonById(round.player2Pokéchakuchon);
+
+        const winnerId = determineRoundWinner(player1Pokéchakuchon, player2Pokéchakuchon);
+
+        await pool.query('UPDATE rounds SET winner_id = ? WHERE id = ?', [winnerId, roundId]);
+
+        res.send({ winnerId });
+    } catch (error) {
+        handleDatabaseError(error);
+        res.status(500).send({ error: "Internal server error", details: error });
+    }
+};
+
+
+
+async function getPokéchakuchonById(id: Pokéchakuchon): Promise<Pokéchakuchon> {
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM pokéchakuchons WHERE id = ?', [id]);
+    return rows[0] as Pokéchakuchon;
+}
