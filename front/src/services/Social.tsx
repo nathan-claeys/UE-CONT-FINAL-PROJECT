@@ -32,6 +32,7 @@ export async function getUserProfile() : Promise<User> {
   try {
     const response = await axios.get(`${serverUrl}/users/me`);
     return {
+      id: response.data.id,
       name: response.data.username,
       email: response.data.email,
       createdAt: response.data.createdAt,
