@@ -16,6 +16,11 @@ cd front
 docker build -t pokechakucha-front:1.0.0 .
 docker run -p 5173:3000  pokechakucha-front:1.0.0
 
+### Test user with mock data
+
+email : test@imt-atlantique.net 
+password : test
+
 ### To use other microservices instead of mock data
 
 - Run service `user` on port 3000
