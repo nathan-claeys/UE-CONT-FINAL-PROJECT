@@ -1,10 +1,13 @@
 import axios from 'axios'
 
+const serverUrl = "http://localhost:3000";
+const clubURL = "http://localhost:3001";
+
 export interface User {
   id: number;
   name: string;
   email: string;
-  age: number;
+  createdAt?: number;
   badges: string[];
   friends: number[];
 }
@@ -13,7 +16,6 @@ const mock_user: User = {
   id: 1,
   name: 'Sacha du Bourg Palette',
   email: 'sacha@bourgpalette.jp',
-  age: 12,
   badges: ['eau', 'feu', 'terre', 'air'],
   friends: [2, 3, 4, 5],
 }
@@ -26,17 +28,20 @@ const mock_clubs = [
 
 const use_mock_data = true
 
-export function getUserProfile(): User {
-  if (use_mock_data) {
-    return mock_user
+export async function getUserProfile() : Promise<User> {
+  try {
+    const response = await axios.get(`${serverUrl}/users/me`);
+    return {
+      name: response.data.username,
+      email: response.data.email,
+      createdAt: response.data.createdAt,
+      badges: mock_user.badges,
+      friends: mock_user.friends,
+    };
+  } catch (error) {
+    console.error(error);
+    return mock_user; // or throw an error
   }
-  axios.get('/user/profile').then((response) => {
-    return response.data
-  }).catch((error) => {
-    console.error(error)
-  }
-  )
-  return mock_user
 }
 
 export function getUserFriends(): number[] {
@@ -53,17 +58,29 @@ export function getUserFriends(): number[] {
 
 }
 
-export function getUserClubs(): { id: number, name: string, members: number }[] {
-  if (use_mock_data) {
-    return mock_clubs
-  }
-  axios.get('/user/clubs').then((response) => {
+export async function getClubs(): Promise<{ id: number, name: string, members: number }[]> {
+  return axios.get(`${clubURL}/clubs`).then((response) => {
     return response.data
   }).catch((error) => {
     console.error(error)
   }
   )
-  return mock_clubs
+}
+
+export async function createClub(name: string): Promise<{ id: number, name: string, members: number }> {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  try {
+    const response = await axios.post(`${clubURL}/clubs`, {
+      name, user: {
+        id: user.id,
+        name: user.name,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+  return { id: 0, name, members: 1 }
 }
 
 export function joinClub(club_id: number): { id: number, name: string, members: number } {
@@ -89,7 +106,7 @@ export function getMyClub(): { id: number, name: string, members: number } | nul
   return null
 }
 
-export function leaveClub(): void {
+export function leaveClub(name:String): void {
   axios.post(`/user/clubs/leave`).then((response) => {
     console.log(response)
   }).catch((error) => {

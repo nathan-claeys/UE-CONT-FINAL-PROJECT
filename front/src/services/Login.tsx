@@ -1,37 +1,28 @@
 import axios from 'axios';
 
-const serverUrl = "";
+const serverUrl = "http://localhost:3000";
 
 interface LoginResponse {
   token: string;
 }
 
-//Mock login function
-async function login(email: string, password: string): Promise<boolean> {
-  if (email === 'a@b.fr' && password === '123') {
-    localStorage.setItem('token',"123");
-    return true;
-    }
-    else {
-        throw new Error('Invalid credentials');
-        }
-}
 
 // Fonction de connexion
-async function login1(email: string, password: string): Promise<boolean> {
+async function login(email: string, password: string): Promise<boolean> {
   try {
-    const response = await axios.post<LoginResponse>(`${serverUrl}/api/auth/login`, {
+    const response = await axios.post<LoginResponse>(`${serverUrl}/users/login`, {
       email,
       password,
     });
 
     if (response.status === 200 && response.data.token) {
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', response.data.user);
       return true;
     } else {
       throw new Error('Erreur inconnue lors de la connexion.');
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       // Vérifie les erreurs spécifiques renvoyées par le serveur
       if (error.response.status === 401) {

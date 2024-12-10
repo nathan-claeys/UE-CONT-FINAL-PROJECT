@@ -12,8 +12,8 @@ export default function Login(): JSX.Element {
   const { login: setAuthUser } = useAuth();
 
   const handleSubmit = async (): Promise<void> => {
-    if (!email.endsWith('.fr')) {
-      setError('L\'adresse email doit se terminer par ".fr".');
+    if (!email.endsWith('@imt-atlantique.net')) {
+      setError('L\'adresse email doit se terminer par "@imt-atlantique.net".');
       return;
     }
 
