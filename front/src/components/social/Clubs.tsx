@@ -9,20 +9,21 @@ interface Club {
 }
 
 const Clubs: React.FC = () => {
-  const [myClub, setMyClub] = useState<{ id: number; name: string; members: number } | null>();
-  const [clubs, setClubs] = useState<Club[]>();
+  const [myClub, setMyClub] = useState<Club | null>(null);
+  const [clubs, setClubs] = useState<Club[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newClubName, setNewClubName] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchClubs = async () => {
-      const clubs = await getClubs(); // Appel à la fonction de service
-      setClubs(clubs);
-      const myClub = getMyClub(); // Appel à la fonction de service
-      setMyClub(myClub);
+    const fetchClubsData = async () => {
+      const clubsData = await getClubs();
+      const myClubData = await getMyClub();
+      setClubs(clubsData);
+      setMyClub(myClubData);
     };
-    fetchClubs();
+
+    fetchClubsData();
   }, []);
 
   const handleAddClub = async () => {
@@ -30,29 +31,24 @@ const Clubs: React.FC = () => {
       message.error("Club name cannot be empty!");
       return;
     }
+
     setLoading(true);
     try {
-      await createClub(newClubName); // Appel à la fonction de service
+      await createClub(newClubName);
       message.success(`Club "${newClubName}" created successfully!`);
       setNewClubName("");
       setIsModalVisible(false);
     } catch (error: any) {
-      message.error(error.message || "Failed to create the club.");
+      message.error("Failed to create the club.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleJoinClub = (club: Club) => {
-    Modal.confirm({
-      title: "Confirm Join",
-      content: `Are you sure you want to join the club "${club.name}"?`,
-      onOk: () => {
-        const joinedClub = joinClub(club.id); // Appel à la fonction de service
-        setMyClub(joinedClub);
-        message.success(`You have joined the club "${club.name}".`);
-      },
-    });
+  const handleJoinClub = async (club: Club) => {
+    const joinedClub = await joinClub(club.id);
+    setMyClub(joinedClub);
+    message.success(`You have joined the club "${club.name}".`);
   };
 
   return (
@@ -61,13 +57,13 @@ const Clubs: React.FC = () => {
 
       <h3>My Club</h3>
       {myClub ? (
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div>
           <p>
             {myClub.name} ({myClub.members} members)
           </p>
           <Button
             onClick={() => {
-              leaveClub(myClub.name); 
+              leaveClub(myClub.name);
               setMyClub(null);
               message.success("You have left the club.");
             }}
@@ -79,15 +75,13 @@ const Clubs: React.FC = () => {
         <p>You are not in a club.</p>
       )}
 
-      <Button type="primary" style={{ margin: "10px 0" }} onClick={() => setIsModalVisible(true)}>
-        Create Club
-      </Button>
+      <Button onClick={() => setIsModalVisible(true)}>Create Club</Button>
 
       <h3>Available Clubs</h3>
-      {clubs && clubs
+      {clubs
         .filter((club) => !myClub || club.id !== myClub.id)
         .map((club) => (
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }} key={club.id}>
+          <div key={club.id}>
             <p>
               {club.name} ({club.members} members)
             </p>
@@ -95,7 +89,6 @@ const Clubs: React.FC = () => {
           </div>
         ))}
 
-      {/* Modal pour ajouter un club */}
       <Modal
         title="Create a Club"
         visible={isModalVisible}
@@ -104,7 +97,7 @@ const Clubs: React.FC = () => {
           <Button key="cancel" onClick={() => setIsModalVisible(false)}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" loading={loading} onClick={handleAddClub}>
+          <Button key="submit" type="primary" onClick={handleAddClub} loading={loading}>
             Create
           </Button>,
         ]}
