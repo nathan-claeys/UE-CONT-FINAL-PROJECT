@@ -25,7 +25,7 @@ async function login(email: string, password: string): Promise<boolean> {
     }
   } catch (error: unknown) {
     if (email === 'test@imt-atlantique.net' && password === 'test') {
-      localStorage.setItem('token', JSON.stringify({ token: "test" }));
+      localStorage.setItem('token', 'test' );
       localStorage.setItem('user', JSON.stringify({
         id: 1,
         name: 'Sacha du Bourg Palette',
