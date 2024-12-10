@@ -1,0 +1,10 @@
+# REVERSE PROXY
+
+Pour accéder aux services de l'application, l'interface passe par un reverse proxy qui redirige les requêtes vers les services nécessaires.
+La techologie utilisée est Traefik Proxy, qui permet de faire de la répartition de charge et du reverse proxy pour des conteneurs Docker à partir de leur label.
+
+Dans l'idée, on divise les containeurs dans différents réseaux : le réseau proxy, et le réseau interne. Le réseau proxy comprend le reverse proxy et les containeurs avec lesquels le proxy peut accéder : ce sont les services qui sont exposé à travers le reverse proxy. Dans le réseau interne, tout les services y sont mis et ne peuvent pas communiquer avec l'extérieur : Il faut donc passer par un des services lié au reverse proxy pour pouvoir sortir du réseau. Pour améliorer la sécurité, il faudrait créer des réseaux spécifiques entre un service et sa base de données, afin que la base de donnée d'un service ne soit accessible que par son service.
+
+Dans l'idée, le fichier compose-inprogress.yaml montre la structure que nous souhaitions mettre en place pour les différents services (sans considérer les bases de données). On y retrouve les deux réseaux, proxy et interne, ainsi qu'un troisième réseau externe qui correspond au client.
+
+Par manque de temps, nous n'avons pas pu atteindre cette implémentation finale dans compose.yaml. Afin de pouvoir tout de même tester certains points, nous avons implémenter le service team en l'ajoutant dans le réseau proxy. Ainsi, une fois le docker compose lancé, il est possible d'accéder au service avec l'url "http://team.localhost/", et accéder à ses différents points d'entrée, par exemple "/team/team1", en utilisant "http://team.localhost/team/team1". Nous avons commencé à ajouter les services clubs et store, mais il reste encore quelques soucis d'intégration.

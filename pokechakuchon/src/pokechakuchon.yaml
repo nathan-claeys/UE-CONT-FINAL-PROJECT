@@ -1,0 +1,260 @@
+openapi: 3.0.3
+info:
+  title: Gadget and Pokemon API
+  version: "1.0.0"
+  description: API for managing gadgets and Pokémon with CRUD operations and type-specific details.
+paths:
+  /creatures:
+    get:
+      summary: Get all Pokémon
+      responses:
+        "200":
+          description: A list of Pokémon
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pokemon"
+        "500":
+          description: Database error
+    post:
+      summary: Add a new Pokémon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pokemon"
+      responses:
+        "201":
+          description: Pokemon successfully added
+        "400":
+          description: Validation error or Pokémon already exists
+  /creatures/id/{id}:
+    get:
+      summary: Get a Pokémon by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the Pokémon to retrieve
+      responses:
+        "200":
+          description: A Pokémon object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+        "404":
+          description: Pokémon not found
+  /creatures/name/{name}:
+    get:
+      summary: Get a Pokémon by Name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the Pokémon to retrieve
+      responses:
+        "200":
+          description: A Pokémon object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+        "404":
+          description: Pokémon not found
+  /creatures/{id}:
+    put:
+      summary: Update a Pokémon
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the Pokémon to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pokemon"
+      responses:
+        "200":
+          description: Pokemon successfully updated
+        "404":
+          description: Pokémon not found
+    delete:
+      summary: Delete a Pokémon
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the Pokémon to delete
+      responses:
+        "200":
+          description: Pokemon successfully deleted
+        "404":
+          description: Pokémon not found
+  /gadgets:
+    get:
+      summary: Get all gadgets
+      responses:
+        "200":
+          description: A list of gadgets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Gadget"
+        "500":
+          description: Database error
+    post:
+      summary: Add a new gadget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Gadget"
+      responses:
+        "201":
+          description: Gadget successfully added
+        "400":
+          description: Validation error or gadget already exists
+  /gadgets/id/{id}:
+    get:
+      summary: Get a gadget by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the gadget to retrieve
+      responses:
+        "200":
+          description: A gadget object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gadget"
+        "404":
+          description: Gadget not found
+  /gadgets/name/{name}:
+    get:
+      summary: Get a gadget by Name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the gadget to retrieve
+      responses:
+        "200":
+          description: A gadget object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Gadget"
+        "404":
+          description: Gadget not found
+  /gadgets/{id}:
+    put:
+      summary: Update a gadget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the gadget to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Gadget"
+      responses:
+        "200":
+          description: Gadget successfully updated
+        "404":
+          description: Gadget not found
+    delete:
+      summary: Delete a gadget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the gadget to delete
+      responses:
+        "200":
+          description: Gadget successfully deleted
+        "404":
+          description: Gadget not found
+components:
+  schemas:
+    Pokemon:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the Pokémon
+        name:
+          type: string
+          description: Name of the Pokémon
+        type:
+          $ref: "#/components/schemas/PokemonType"
+        power:
+          type: integer
+          description: Power level of the Pokémon
+      required:
+        - name
+        - type
+        - power
+    Gadget:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the gadget
+        name:
+          type: string
+          description: Name of the gadget
+        target:
+          $ref: "#/components/schemas/GadgetTarget"
+        points:
+          type: integer
+          description: Points associated with the gadget
+      required:
+        - name
+        - target
+        - points
+    PokemonType:
+      type: string
+      description: Type of the Pokémon
+      enum:
+        - normal
+        - fire
+        - water
+        - grass
+    GadgetTarget:
+      type: string
+      description: Target of the gadget
+      enum:
+        - MY_ATTACK
+        - OPPONENT_ATTACK
+        - TYPE_IMPACT
+        - CREDIT
