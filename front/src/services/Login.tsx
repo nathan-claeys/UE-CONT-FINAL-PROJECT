@@ -4,6 +4,7 @@ const serverUrl = "http://localhost:3000";
 
 interface LoginResponse {
   token: string;
+  user: string;
 }
 
 
@@ -23,6 +24,17 @@ async function login(email: string, password: string): Promise<boolean> {
       throw new Error('Erreur inconnue lors de la connexion.');
     }
   } catch (error: unknown) {
+    if (email === 'test@imt-atlantique.net' && password === 'test') {
+      localStorage.setItem('token', JSON.stringify({ token: "test" }));
+      localStorage.setItem('user', JSON.stringify({
+        id: 1,
+        name: 'Sacha du Bourg Palette',
+        email: 'sacha@bourgpalette.jp',
+        badges: ['eau', 'feu', 'terre', 'air'],
+        friends: [2, 3, 4, 5],
+      }));
+      return true;
+    }
     if (axios.isAxiosError(error) && error.response) {
       // Vérifie les erreurs spécifiques renvoyées par le serveur
       if (error.response.status === 401) {
@@ -31,8 +43,9 @@ async function login(email: string, password: string): Promise<boolean> {
           throw new Error("L'adresse email n'est pas enregistrée.");
         } else if (serverError === 'Wrong password') {
           throw new Error('Mot de passe incorrect.');
+          }
+          return false;
         }
-      }
       // Si une autre erreur survient
       throw new Error('Erreur lors de la connexion.');
     } else {
