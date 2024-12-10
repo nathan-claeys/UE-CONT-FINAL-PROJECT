@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -6,6 +6,7 @@ services:
     container_name: mysql_container
     restart: always
     environment:
+      DB_HOST: db
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: my_database
       MYSQL_USER: user
@@ -14,6 +15,24 @@ services:
       - "3307:3306" # Expose port 3306
     volumes:
       - db_data:/var/lib/mysql
+
+  fastify-service:
+    build:
+      context: ./api_en
+      dockerfile: Dockerfile
+    container_name: fastify_container
+    ports:
+      - "3000:3000" # Expose Fastify on port 3000
+    volumes:
+      - .:/api_en # Mount the current directory to /app
+    environment:
+      NODE_ENV: development
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: user_password
+      DB_DATABASE: my_database
+    depends_on:
+      - db # Ensures that the Fastify service waits for the database to be ready before starting
 
 volumes:
   db_data:
