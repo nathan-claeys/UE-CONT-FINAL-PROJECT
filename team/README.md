@@ -4,6 +4,8 @@ Le service Team du domaine User connaît les créatures possédées par les util
 
 ## Endpoints
 
+La documentation précise peut être trouvée à l'adresse "http://127.0.0.1:3000/api-docs/json"
+
 ### Collection (toutes les créatures du joueur)
 
 Voir les créatures de la collection perssonnelle  
