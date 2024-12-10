@@ -31,5 +31,8 @@ password : test
 
 For issues or questions, contact:
 
-- Team Lead: [ Nathan CLAEYS ]
+- Team Lead: [ Antoine CHEUCLE ]
+- Lead Tech: [ Nathan CLAEYS]
+- Chief Happiness Officer: [Jean Baptiste LAMBERTIN]
+- Very Helpfull Intern: [Felipe LOBATO]
 - Developers : [ Nathan CLAEYS - Jean Baptiste LAMBERTIN - Antoine CHEUCLE - Felipe LOBATO ]
