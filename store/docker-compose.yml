@@ -9,13 +9,13 @@ services:
     environment:
       NODE_ENV: production # Définir des variables d'environnement
     depends_on:
-      - mysql_store_service # S'assure que MySQL démarre avant l'application
+      - store_db # S'assure que MySQL démarre avant l'application
     networks:
       - app_network # Connecte au réseau défini
 
-  mysql_store_service:
+  store_db:
     image: mysql:8.0 # Utilise l'image MySQL officielle
-    container_name: mysql_store_service
+    container_name: store_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: store_service

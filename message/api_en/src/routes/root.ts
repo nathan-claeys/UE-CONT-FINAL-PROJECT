@@ -1,9 +1,11 @@
-import { FastifyPluginAsync } from 'fastify'
+// routes/lists/index.ts
 
-const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.get('/', async function (request, reply) {
-    return { root: true }
-  })
+import { FastifyInstance } from "fastify";
+
+async function message(fastify: FastifyInstance) {
+  fastify.get("/", async function (request, reply) {
+    return { root: true };
+  });
 }
 
-export default root;
+export default message;

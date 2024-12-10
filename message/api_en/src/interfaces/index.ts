@@ -8,3 +8,6 @@ export interface ShowMessages {
   receiver: number;
   sender: number;
 }
+export interface DelMessage {
+  id_message: number;
+}
