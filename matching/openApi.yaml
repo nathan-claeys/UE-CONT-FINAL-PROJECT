@@ -1,0 +1,343 @@
+openapi: 3.0.3
+info:
+  title: Matching Service API
+  description: API documentation for the Matching Service, including match and round management, match history, and statistics.
+  version: 1.0.0
+
+paths:
+  /matches:
+    get:
+      summary: Retrieve a list of all existing matches.
+      parameters:
+        - name: status
+          in: query
+          description: Filter matches by status
+          required: false
+          schema:
+            type: string
+            enum: [created, in-progress, finished]
+        - name: userId
+          in: query
+          description: Filter matches involving a specific user
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    matchId:
+                      type: string
+                    creatorId:
+                      type: string
+                    opponentId:
+                      type: string
+                    status:
+                      type: string
+
+    post:
+      summary: Create a new match.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                creatorId:
+                  type: string
+                opponentId:
+                  type: string
+                  nullable: true
+                matchType:
+                  type: string
+                  enum: [ranked, casual]
+      responses:
+        '201':
+          description: Match created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matchId:
+                    type: string
+                  creatorId:
+                    type: string
+                  opponentId:
+                    type: string
+                  matchType:
+                    type: string
+
+  /matches/{matchId}:
+    get:
+      summary: Retrieve details of a specific match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Match details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matchId:
+                    type: string
+                  creatorId:
+                    type: string
+                  opponentId:
+                    type: string
+                  matchType:
+                    type: string
+                  status:
+                    type: string
+
+    patch:
+      summary: Update the status of a match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [in-progress, finished]
+      responses:
+        '200':
+          description: Match status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matchId:
+                    type: string
+                  status:
+                    type: string
+
+    delete:
+      summary: Delete a canceled match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Match deleted successfully
+
+  /matches/{matchId}/rounds:
+    get:
+      summary: Retrieve the list of rounds for a specific match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match to retrieve rounds for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of rounds for the match
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    roundId:
+                      type: string
+                    roundNumber:
+                      type: integer
+                    player1Choice:
+                      type: string
+                    player2Choice:
+                      type: string
+
+    post:
+      summary: Add a new round to an existing match.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match to add the round to
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roundNumber:
+                  type: integer
+                player1Choice:
+                  type: string
+                player2Choice:
+                  type: string
+      responses:
+        '201':
+          description: Round added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roundId:
+                    type: string
+                  roundNumber:
+                    type: integer
+                  player1Choice:
+                    type: string
+                  player2Choice:
+                    type: string
+
+  /matches/{matchId}/rounds/{roundId}:
+    get:
+      summary: Retrieve details of a specific round.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match
+          schema:
+            type: string
+        - name: roundId
+          in: path
+          required: true
+          description: ID of the round to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Round details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roundId:
+                    type: string
+                  roundNumber:
+                    type: integer
+                  player1Choice:
+                    type: string
+                  player2Choice:
+                    type: string
+
+    patch:
+      summary: Update the results of a round.
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: ID of the match
+          schema:
+            type: string
+        - name: roundId
+          in: path
+          required: true
+          description: ID of the round to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                winnerId:
+                  type: string
+      responses:
+        '200':
+          description: Round updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  winnerId:
+                    type: string
+
+  /matches/history:
+    get:
+      summary: Retrieve the match history for a user.
+      parameters:
+        - name: userId
+          in: query
+          description: The user's ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User's match history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    matchId:
+                      type: string
+                    creatorId:
+                      type: string
+                    opponentId:
+                      type: string
+                    status:
+                      type: string
+                    matchType:
+                      type: string
+
+  /matches/stats:
+    get:
+      summary: Retrieve global or user-specific match statistics.
+      parameters:
+        - name: userId
+          in: query
+          description: The user's ID (optional)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Match statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalMatches:
+                    type: integer
+                  totalWins:
+                    type: integer
+                  totalLosses:
+                    type: integer
+

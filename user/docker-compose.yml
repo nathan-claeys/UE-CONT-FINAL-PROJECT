@@ -1,0 +1,53 @@
+services:
+  users-api:
+    build:
+      context: .
+    container_name: pokechakucha-users-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Database
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=pokechakucha
+      - DB_PASSWORD=pokechakucha123
+      - DB_NAME=pokechakucha_users
+      # JWT
+      - JWT_SECRET=5HO8cx4eHzRVR8lIyur2bcKhHwCgzEuAnjMUP2GjilXnJBto9nV9H0ijKogZdv3D
+      - JWT_EXPIRES_IN=24h
+      # Logging
+      - LOG_LEVEL=info
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pokechakucha-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: pokechakucha-users-db
+    environment:
+      POSTGRES_USER: pokechakucha
+      POSTGRES_PASSWORD: pokechakucha123
+      POSTGRES_DB: pokechakucha_users
+    ports:
+      - "5432:5432"
+    volumes:
+      - pokechakucha_users_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pokechakucha"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pokechakucha-network
+
+volumes:
+  pokechakucha_users_data:
+
+networks:
+  pokechakucha-network:
+    driver: bridge
